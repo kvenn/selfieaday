@@ -1,0 +1,50 @@
+NAV:
+	clickable logo for feed 	- left (HOME ICON?)
+	search		 				- left (centered?)
+		looks for people (@)
+		and hashtags (#)
+
+	feed 						- right
+	login						- right (signed out)
+	ME 							- right (signed in)	
+	dropdown					- right (signed in)
+		settings
+		logout
+
+	rootsope.loggedinuser - make request if it's null
+		set to something if logged out
+
+
+FEED: (/feed)
+	List of all people set to public
+		just show their names in a list to start
+		click on name to go to profile
+
+PROFILE: (/profile)
+	shows username
+	the people they have liked
+	their photos
+	who likes them and what comments there are
+
+	requires a User object for that page - gets argument from url and makes get for that username
+	then sets scope.user = user
+		populate page with that
+		if no user - say no user
+		if private - say private
+
+	IF logged in:
+		can click "take photo" button
+		(V2) click on photos to go to EDIT page
+
+LOGIN/SIGNUP: (/login and /signup)
+	if logged in:
+		redirect to feed
+
+	can toggle between log in and sign up
+
+	sign up success takes you to feed (or redirects if coming from clicking "like")
+	same with login (default to feed for now)
+
+SETTINGS:
+	daily email config - time of day
+	private/public toggle
