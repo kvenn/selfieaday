@@ -1,0 +1,39 @@
+<div class="row">
+
+    <div class="col-sm-6">
+        <div class="well">
+            <h3><span class="fa fa-user"></span> Local</h3>
+
+            <container ng-show="user.username">
+                <p>
+                    <strong>id</strong>: {{ user._id }}<br>
+                    <strong>email</strong>: {{ user.email }}<br>
+                    <strong>username</strong>: {{ user.username }}<br>
+                    <strong>password</strong>: {{ user.password }}
+                </p>
+            </container>
+
+            <container ng-show="isLoggedIn">
+
+                <div class="camera">
+                    <video id="video">Video stream not available.</video>
+                    <button id="startbutton">Take photo</button>
+                </div>
+                <canvas id="canvas">
+                </canvas>
+                <div class="output">
+                    <img id="photo" alt="The screen capture will appear in this box.">
+                </div>
+
+
+                <a ng-click="uploadPhoto()">Upload photo</a>
+                <p id="status">Please select a file</p>
+
+            </container>
+
+            <container ng-show="errorMessage">
+                <p>{{errorMessage}}</p>
+            </container>
+        </div>
+    </div>
+</div>
