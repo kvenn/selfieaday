@@ -6,12 +6,14 @@ aws = require('aws-sdk');
 // grab the nerd model we just created
 var Pic = require('./models/pic');
 var User = require('./models/user');
-var ObjectId = require('mongoose').Types.ObjectId;
+//var ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = function (app, passport)
 {
-	/** User API =========================================================== */
-		// Get all users
+	/*===================================================
+	 USER API
+	 ====================================================*/
+	// Get all users
 	app.get('/api/user', function (req, res)
 	{
 		var query;
@@ -25,60 +27,31 @@ module.exports = function (app, passport)
 			query = {isPrivate: false}
 		}
 
-		// use mongoose to get all users in the database
-		//User.find(query, function (err, users)
-		//{
-		//	// if there is an error retrieving, send the error.
-		//	// nothing after res.send(err) will execute
-		//	if (err)
-		//		res.status(400).send(err);
-		//
-		//	var ids = users.map(function(user) { return user._id; });
-		//	// Get the companies whose founders are in that set.
-		//	Pic.find({userId: {$in: ids}}, function(err, pics) {
-		//		if (err)
-		//			console.log("error getting pics");
-		//		user.pics = pics;
-		//	});
-		//
-		//	// return all users in JSON format
-		//	res.json(users);
-		//});
-
-		//User.find(query).populate('pics').exec(function(err, user){console.log(user.pics);})
-
+		// populate pics wit hteh actual pics they reference
 		User.find(query).populate('pics').exec(function (err, users)
 		{
 			if (err)
 				res.status(400).send(err);
-
 			res.json(users);
 		});
 	});
 
+	// Get specific user by username
 	app.get('/api/user/:username', function (req, res)
 	{
 		var username = req.params.username;
-		User.findOne({username: username}, function (err, user)
+		User.findOne({username: username}).populate('pics').exec(function (err, user)
 		{
 			if (err)
 				res.status(404).send(err);
-
-			Pic.find({userId: user._id}, function (err, pics)
-			{
-				console.log("pic");
-				if (err)
-					console.log("error getting pics");
-				user.pics = pics;
-			});
-
 			res.json(user);
 		})
 	});
 
-	/** Pic API =========================================================== */
-
-		// Sign the S3 Credentials to allow direct upload
+	/*===================================================
+	 PIC API
+	 ====================================================*/
+	// Sign the S3 Credentials to allow direct upload
 	app.get('/sign_s3', function (req, res)
 	{
 		console.log(process.env.S3_BUCKET);
@@ -110,6 +83,7 @@ module.exports = function (app, passport)
 		});
 	});
 
+	// Send a picture up and save it to the user
 	app.post('/api/pic', function (req, res)
 	{
 		var pic = new Pic();
@@ -122,27 +96,14 @@ module.exports = function (app, passport)
 		pic.save(function (err, pic)
 		{
 			console.log(pic);
+			// Add the pic to the users "pics" array
 			User.update({_id: req.user._id}, {$addToSet: {pics: pic._id}}).exec();
 		});
 	});
 
-	// Get pics
-	app.get('/api/pic', function (req, res)
-	{
-		// use mongoose to get all pics in the database
-		Pic.find(function (err, pics)
-		{
-			// if there is an error retrieving, send the error.
-			// nothing after res.send(err) will execute
-			if (err)
-				res.send(err);
-
-			res.json(pics); // return all pics in JSON format
-		});
-	});
-
-
-	/** AUTH =========================================================== */
+	/*===================================================
+	 AUTH API
+	 ====================================================*/
 	app.get('/api/is_logged_in', function (req, res)
 	{
 		return res.json(
@@ -225,8 +186,10 @@ module.exports = function (app, passport)
 			});
 	});
 
-	/** frontend routes ========================================================= */
-		// route to handle all angular requests
+	/*===================================================
+	 Front end routes
+	 ====================================================*/
+	// route to handle all angular requests
 	app.get('*', function (req, res)
 	{
 		res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file

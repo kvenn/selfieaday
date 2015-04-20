@@ -17,13 +17,14 @@
 
                 <div class="camera">
                     <video id="video">Video stream not available.</video>
-                    <button id="startbutton">Take photo</button>
+                    <button id="startbutton" class="btn-lg btn-primary">Take photo</button>
                 </div>
                 <canvas id="canvas">
                 </canvas>
-                <div class="output">
+                <!--<div class="output">-->
                     <img id="photo" alt="The screen capture will appear in this box.">
-                </div>
+                    <a id="cancelpicture" class="icon"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
+                <!--</div>-->
 
 
                 <a ng-click="uploadPhoto()">Upload photo</a>

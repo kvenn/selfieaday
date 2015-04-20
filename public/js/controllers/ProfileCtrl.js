@@ -37,6 +37,7 @@ angular.module('profile', [])
 			 {
 				 $scope.user = Auth.currentUser();
 				 $scope.isLoggedIn = Auth.isLoggedIn();
+				 $scope.isCurrentProfile = true; // they're viewing their own profile
 			 }
 			 else
 			 {
@@ -45,15 +46,16 @@ angular.module('profile', [])
 		 }
 
 
-		 /**
-		  * Photo Uploading
-		  */
-			 // Upload photo on upload click
+		 /*===================================================
+		  PHOTO UPLOAD
+		  ====================================================*/
+		 // Upload photo on upload click
 		 $scope.uploadPhoto = function ()
 		 {
 			 // Convert the data blob to a file to send to S3
 			 var png_blob = document.getElementById("photo").src;
 
+			 // TODO: pull out below methods into helper class
 			 // convert file to blob that S3 can take
 			 function dataURItoBlob(dataURI)
 			 {
@@ -66,15 +68,18 @@ angular.module('profile', [])
 				 return new Blob([new Uint8Array(array)], {type: 'image/png'});
 			 }
 
-			 function generateUUID(){
+			 function generateUUID()
+			 {
 				 var d = new Date().getTime();
-				 var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-					 var r = (d + Math.random()*16)%16 | 0;
-					 d = Math.floor(d/16);
-					 return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+				 var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c)
+				 {
+					 var r = (d + Math.random() * 16) % 16 | 0;
+					 d = Math.floor(d / 16);
+					 return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
 				 });
 				 return uuid;
 			 }
+
 			 var picture_id = generateUUID();
 
 			 var status_elem = document.getElementById("status");
@@ -94,13 +99,13 @@ angular.module('profile', [])
 					 $http.post('/api/pic/',
 						 {
 							 filename: picture_id,
-							 user: Auth.currentUser()._id,
+							 user:     Auth.currentUser()._id,
 							 hashtags: ["#kyle"]
 						 })
-					 .success(function (data)
-					 {
-						 console.log(data);
-					 });
+						 .success(function (data)
+						 {
+							 console.log(data);
+						 });
 				 },
 				 onError:         function (status)
 				 {
@@ -110,14 +115,15 @@ angular.module('profile', [])
 		 };
 
 
-		 /**
-		  * Photo Taking
-		  */
+		 // TODO pull into directive
+		 /*===================================================
+		  CAMERA SETUP
+		  ====================================================*/
 		 // The width and height of the captured photo. We will set the
 		 // width to the value defined here, but the height will be
 		 // calculated based on the aspect ratio of the input stream.
 
-		 var width = 400;    // We will scale the photo width to this
+		 var width = 500;    // We will scale the photo width to this
 		 var height = 0;     // This will be computed based on the input stream
 
 		 // |streaming| indicates whether or not we're currently streaming
@@ -132,6 +138,26 @@ angular.module('profile', [])
 		 var canvas = null;
 		 var photo = null;
 		 var startbutton = null;
+		 var cancelpicture = null;
+
+		 // Overlap picture of video
+		 function updateLocation()
+		 {
+			 jVideo = jQuery('#video');
+			 jPhoto = jQuery('#photo');
+			 jCancel = jQuery('#cancelpicture');
+
+			 var offset = jVideo.offset();
+
+			 jPhoto.offset({top: offset.top, left: offset.left});
+
+			 jCancel.offset({top: offset.top+10, left: (offset.left + jPhoto.width())-30});
+		 }
+
+		 $(window).resize(function ()
+		 {
+			 updateLocation();
+		 });
 
 		 function startup()
 		 {
@@ -139,13 +165,16 @@ angular.module('profile', [])
 			 canvas = document.getElementById('canvas');
 			 photo = document.getElementById('photo');
 			 startbutton = document.getElementById('startbutton');
+			 cancelpicture = document.getElementById('cancelpicture');
 
-			 navigator.getMedia =
-			 (
-			 navigator.getUserMedia ||
-			 navigator.webkitGetUserMedia ||
-			 navigator.mozGetUserMedia ||
-			 navigator.msGetUserMedia);
+			 $(cancelpicture).hide();
+			 $(photo).hide();
+
+			 navigator.getMedia = (navigator.getUserMedia ||
+								   navigator.webkitGetUserMedia ||
+								   navigator.mozGetUserMedia ||
+								   navigator.msGetUserMedia ||
+								   navigator.oGetUserMedia);
 
 			 navigator.getMedia(
 				 {
@@ -175,24 +204,19 @@ angular.module('profile', [])
 			 {
 				 if (!streaming)
 				 {
-					 height =
-					 video.videoHeight / (
-					 video.videoWidth / width);
+					 height = video.videoHeight / (video.videoWidth / width);
 
 					 // Firefox currently has a bug where the height can't be read from
 					 // the video, so we will make assumptions if this happens.
-
 					 if (isNaN(height))
 					 {
-						 height =
-						 width / (
-						 4 / 3);
+						 height = width / (4 / 3);
 					 }
 
 					 video.setAttribute('width', width);
 					 video.setAttribute('height', height);
-					 canvas.setAttribute('width', width);
-					 canvas.setAttribute('height', height);
+					 //canvas.setAttribute('width', width);
+					 //canvas.setAttribute('height', height);
 					 streaming = true;
 				 }
 			 }, false);
@@ -201,22 +225,27 @@ angular.module('profile', [])
 			 {
 				 takepicture();
 				 ev.preventDefault();
+				 updateLocation();
+			 }, false);
+
+			 cancelpicture.addEventListener('click', function (ev)
+			 {
+				 $(cancelpicture).hide();
+				 $(photo).hide();
+
+				 $(startbutton).show();
+				 clearphoto();
 			 }, false);
 
 			 clearphoto();
 		 }
 
-		 // Fill the photo with an indication that none has been
-		 // captured.
-
+		 // Wipe out the photo container
 		 function clearphoto()
 		 {
-			 var context = canvas.getContext('2d');
-			 context.fillStyle = "#AAA";
-			 context.fillRect(0, 0, canvas.width, canvas.height);
-
 			 var data = canvas.toDataURL('image/png');
 			 photo.setAttribute('src', data);
+			 updateLocation();
 		 }
 
 		 // Capture a photo by fetching the current contents of the video
@@ -224,7 +253,6 @@ angular.module('profile', [])
 		 // format data URL. By drawing it on an offscreen canvas and then
 		 // drawing that to the screen, we can change its size and/or apply
 		 // other changes before drawing it.
-
 		 function takepicture()
 		 {
 			 var context = canvas.getContext('2d');
@@ -236,6 +264,11 @@ angular.module('profile', [])
 
 				 var data = canvas.toDataURL('image/png');
 				 photo.setAttribute('src', data);
+				 updateLocation();
+				 $(startbutton).hide();
+
+				 $(cancelpicture).show();
+				 $(photo).show();
 			 }
 			 else
 			 {
@@ -243,10 +276,10 @@ angular.module('profile', [])
 			 }
 		 }
 
-		 //// Set up our event listener to run the startup process
-		 //// once loading is complete.
-		 //window.addEventListener('load', startup, false);
-		 startup()
+		 // Might need to wait for onload?
+		 // Only start camera if this is the current users profile
+		 if ($scope.isCurrentProfile && !streaming)
+			 startup()
 
 	 }]);
 
