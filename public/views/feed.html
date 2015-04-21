@@ -5,7 +5,17 @@
         <div class="photo_container center-block">
             <img class="slideshow center-block" slideshow images="user.pics">
         </div>
-        <a href="/profile/{{user.username}}">{{user.username}}</a> <br/>
+        <a href="/profile/{{user.username}}">{{user.username}}</a> <span> {{user.pics.length}} Photos</span><br/>
+
+        <div ng-repeat="follower in user.followers | limitTo: 4">
+            <a href="/profile/{{follower.username}}">
+                {{follower.username}}
+            </a>
+            <span>
+                {{$last ? (user.followers.length==1 ? 'likes this' : 'like this') :
+                ($index==user.followers.length-2) ? ' and ' : ', '}}
+            </span>
+        </div>
         <input enterpress user="user" class="form-control" placeholder="Write a comment..."/>
     </div>
 </div>
