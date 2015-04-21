@@ -9,6 +9,9 @@ module.exports = mongoose.model('User',
 		password:    {type: String, select: false},
 		email:       String,
 		phoneNumber: String,
+		isPrivate:   {type: Boolean, default: false},
 		pics:        [{type: Schema.Types.ObjectId, ref: 'Pic'}],
-		isPrivate:   {type: Boolean, default: false}
+		comments:    [{type: Schema.Types.ObjectId, ref: 'Comment'}],
+		followers:    [{type: Schema.Types.ObjectId, ref: 'User'}],
+		following:    [{type: Schema.Types.ObjectId, ref: 'User'}]
 	});

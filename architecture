@@ -19,6 +19,7 @@ FEED: (/feed)
 	List of all people set to public
 		just show their names in a list to start
 		click on name to go to profile
+	can only comment on picture if you're signed in
 
 PROFILE: (/profile)
 	shows username

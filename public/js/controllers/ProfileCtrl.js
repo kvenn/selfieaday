@@ -284,22 +284,34 @@ angular.module('profile', [])
 				 //canvas.height = height;
 				 //context.drawImage(video, 0, 0, width, height);
 
-
-				 var squareDim = 500;
+				 // all of our images in the database should be exactly squareDim by squareDim
+				 var squareDim = 640;
 				 canvas.width = squareDim;
 				 canvas.height = squareDim;
-				 // draw cropped image
-				 var sourceX = 0;
-				 var sourceY = 0;
-				 var destWidth = squareDim;
-				 var destHeight = squareDim;
-
 				 var widthDifference = width - height;
-				 // move over by widthdiff/2 to crop evenly on left and right
-				 context.drawImage(video, widthDifference/2, sourceY, destWidth, destHeight, 0, 0, destWidth, destHeight);
+				 context.drawImage(video, widthDifference/2, 0, width-widthDifference, height, 0, 0, squareDim, squareDim);
+
+				 /*
+				  var squareDim = 900;
+				  canvas.width = squareDim;
+				  canvas.height = squareDim;
+				  // draw cropped image
+				  var sourceX = 0;
+				  var sourceY = 0;
+				  var destWidth = squareDim;
+				  var destHeight = squareDim;
+
+				  var widthDifference = width - height;
+				  // move over by widthdiff/2 to crop evenly on left and right
+				  context.drawImage(video, widthDifference/2, sourceY, destWidth, destHeight, 0, 0, destWidth, destHeight);
+				  */
 
 				 var data = canvas.toDataURL('image/png');
 				 photo.setAttribute('src', data);
+				 // shrink the image to be the same size as the video so it looks normal (but also account for the square cropping)
+				 photo.setAttribute('width', height);
+				 photo.setAttribute('height', height);
+
 				 updateLocation();
 				 $(startbutton).hide();
 				 $(video).hide();

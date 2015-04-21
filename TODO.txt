@@ -12,6 +12,7 @@ taking a picture and then signing out doesn't update the global model
 	or maybe the directive isn't working entirely correclty...
 
 order the pictures in the populate call by date
+	http://stackoverflow.com/questions/5125521/uses-for-mongodb-objectid-creation-time
 
 order the users by some way for the feed call
 
@@ -30,3 +31,5 @@ make the image slideshow only appear once you scroll to it
 	http://morr.github.io/appear.html
 
 put in lines for eyes and middle of face (and a gray outline that shows how it will be saved)
+
+button that toggles the overlay of the last image
