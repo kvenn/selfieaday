@@ -17,20 +17,20 @@ angular.module('feed', [])
 	 function ($http, $scope, $routeParams, $timeout)
 	 {
 		 // TODO pull out to global
-		 $scope.basePhotoUrl = "https://selfieaday.s3.amazonaws.com/";
+		 //$scope.basePhotoUrl = "https://selfieaday.s3.amazonaws.com/";
 
 		 $http.get('/api/user')
 			 .success(function (data)
 			 {
 				 $scope.users = data;
 
-				 $scope.images = data[1].pics;
-
-				 $scope.imgIndex = 0;
-				 $timeout(function advanceSlide() {
-					 $scope.imgIndex = ($scope.imgIndex + 1) % $scope.images.length;
-					 $timeout(advanceSlide, 500);
-				 });
+				 //$scope.images = data[1].pics;
+				 //
+				 //$scope.imgIndex = 0;
+				 //$timeout(function advanceSlide() {
+					// $scope.imgIndex = ($scope.imgIndex + 1) % $scope.images.length;
+					// $timeout(advanceSlide, 500);
+				 //});
 			 });
 
 	 }]);

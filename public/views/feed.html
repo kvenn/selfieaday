@@ -3,7 +3,7 @@
 <div id="feed_container">
     <div class="feed_item center-block" ng-repeat="user in users">
         <div class="photo_container center-block">
-            <img ng-src="{{basePhotoUrl}}{{images[imgIndex].filename}}">
+            <img slideshow images="user.pics">
         </div>
         <a href="/profile/{{user.username}}">{{user.username}}</a>
     </div>

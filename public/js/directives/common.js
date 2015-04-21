@@ -26,4 +26,23 @@ angular.module('common-directives', [])
 				});
 			}
 		}
+	}])
+	.directive('slideshow', ['$timeout', function ($timeout)
+	{
+		return {
+			restrict: 'A',
+			scope:    {images: '=images'},
+			//template: '<td>dddd: {{ ngModel.name }}</td><td>ddd: {{ ngModel.age }}</td>',
+			link:     function (scope, element, attrs)
+			{
+				var fullPathUrl = "https://selfieaday.s3.amazonaws.com/";
+				scope.imgIndex = 0;
+				$timeout(function advanceSlide() {
+					scope.imgIndex = (scope.imgIndex + 1) % scope.images.length;
+					attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
+					$timeout(advanceSlide, 1000);
+				});
+
+			}
+		};
 	}]);

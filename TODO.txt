@@ -1,0 +1,18 @@
+TODO:
+
+----P1-----
+turn off camera when you leave the "your profile" page
+
+search by username and search by hashtag
+
+email
+
+
+
+----P2-----
+pre-load all images
+	http://stackoverflow.com/questions/14373683/how-to-show-image-only-when-it-is-completely-loaded
+
+prompt to download plugin for safari/ie users (for camera)
+
+find a way to tell the user to permanently accept the webrtc from our website
