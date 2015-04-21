@@ -15,16 +15,29 @@ angular.module('profile', [])
 	['$http', '$scope', '$routeParams', '$route', 'Auth',
 	 function ($http, $scope, $routeParams, $route, Auth)
 	 {
+		 /*===================================================
+		  SCOPE VARIABLE INIT
+		  ====================================================*/
 		 // TODO: make global (rootscope?)
 		 $scope.basePhotoUrl = "https://selfieaday.s3.amazonaws.com/";
+		 $scope.isLoggedIn = Auth.isLoggedIn();
+		 $scope.currentUser = Auth.currentUser();
+		 var mediaStream;
+		 // TODO: just set the css to hide by default
+		 $("#camera").hide();
 
 		 var username = $routeParams.username;
+		 // Viewing a user
 		 if (username)
 		 {
 			 $http.get('/api/user/' + username)
 				 .success(function (data)
 				 {
 					 $scope.user = data;
+					 if ($scope.currentUser != null)
+					 {
+						 $scope.isFollowing = userIndexOf($scope.currentUser.following, $scope.user) != -1
+					 }
 				 })
 				 .error(function (response, data, status, header)
 				 {
@@ -33,35 +46,93 @@ angular.module('profile', [])
 					 $scope.errorMessage = "The user " + username + " doesn't exist or is set to private.";
 					 //}
 				 });
+			 $scope.isCurrentProfile = false;
 		 }
-		 else
+		 $scope.$watch(Auth.currentUser, function (currentUser)
 		 {
-			 $scope.$watch(Auth.currentUser, function (currentUser)
+			 $scope.isLoggedIn = Auth.isLoggedIn();
+			 $scope.currentUser = Auth.currentUser();
+			 // viewing a user
+			 if (username)
 			 {
-				 var loggedIn = Auth.isLoggedIn();
-				 if (loggedIn)
+				 if ($scope.currentUser && $scope.user)
 				 {
-					 $scope.isLoggedIn = loggedIn;
+					 $scope.isFollowing = userIndexOf($scope.currentUser.following, $scope.user) != -1
+				 }
+			 }
+			 // Viewing your own profile (if you're logged in)
+			 else
+			 {
+				 if ($scope.isLoggedIn)
+				 {
 					 $scope.user = currentUser;
 					 $scope.isCurrentProfile = true; // they're viewing their own profile
 				 }
 				 else
 				 {
-					 $scope.errorMessage = "Please log in to view your profile."
-					 $scope.isLoggedIn = loggedIn;
+					 $scope.errorMessage = "Please log in to view your profile.";
 					 $scope.user = null;
 					 $scope.isCurrentProfile = false;
 				 }
-			 });
-		 }
+			 }
 
-		 // Might need to wait for onload?
-		 // Only start camera if this is the current users profile
-		 $scope.$watch($scope.isCurrentProfile, function (currentUser)
-		 {
-			 if ($scope.isCurrentProfile && !streaming)
-				 startup();
 		 });
+
+		 // Turn off camera once you leave the profile
+		 $scope.$on('$destroy', function ()
+		 {
+			 if (mediaStream)
+			 {
+				 mediaStream.stop();
+			 }
+		 });
+
+		 /*===================================================
+		  CLICK HANDLERS
+		  ====================================================*/
+		 $scope.showCamera = function ()
+		 {
+			 $scope.cameraOn = true;
+			 $("#camera").show();
+			 startup();
+		 };
+		 $scope.hideCamera = function ()
+		 {
+			 $scope.cameraOn = false;
+			 $("#camera").hide();
+			 mediaStream.stop();
+		 };
+
+		 $scope.follow = function ()
+		 {
+			 $http.post('/api/follow/', {userToFollowId: $scope.user._id})
+				 .success(function (data)
+				 {
+					 var currentUser = Auth.currentUser();
+					 currentUser.following.push($scope.user);
+					 $scope.user.followers.push(currentUser);
+
+					 Auth.updateCurrentUser(currentUser);
+					 $scope.isFollowing = true;
+				 })
+		 };
+
+		 $scope.unfollow = function ()
+		 {
+			 $http.post('/api/unfollow/', {userToUnfollowId: $scope.user._id})
+				 .success(function (data)
+				 {
+					 var currentUser = Auth.currentUser();
+					 var unfollowUserIdx = userIndexOf(currentUser.following, $scope.user);
+					 currentUser.following.splice(unfollowUserIdx, 1);
+
+					 var removeFollowerIdx = userIndexOf($scope.user.followers, currentUser);
+					 $scope.user.followers.splice(removeFollowerIdx, 1);
+
+					 Auth.updateCurrentUser(currentUser);
+					 $scope.isFollowing = false;
+				 })
+		 };
 
 		 /*===================================================
 		  PHOTO UPLOAD
@@ -71,31 +142,6 @@ angular.module('profile', [])
 		 {
 			 // Convert the data blob to a file to send to S3
 			 var png_blob = document.getElementById("photo").src;
-
-			 // TODO: pull out below methods into helper class
-			 // convert file to blob that S3 can take
-			 function dataURItoBlob(dataURI)
-			 {
-				 var binary = atob(dataURI.split(',')[1]);
-				 var array = [];
-				 for (var i = 0; i < binary.length; i++)
-				 {
-					 array.push(binary.charCodeAt(i));
-				 }
-				 return new Blob([new Uint8Array(array)], {type: 'image/png'});
-			 }
-
-			 function generateUUID()
-			 {
-				 var d = new Date().getTime();
-				 var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c)
-				 {
-					 var r = (d + Math.random() * 16) % 16 | 0;
-					 d = Math.floor(d / 16);
-					 return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-				 });
-				 return uuid;
-			 }
 
 			 var picture_id = generateUUID();
 
@@ -112,16 +158,20 @@ angular.module('profile', [])
 				 onFinishS3Put:   function (public_url)
 				 {
 					 status_elem.innerHTML = 'Upload completed. Uploaded to: ' + public_url;
-					 // TODO: save off to photo table with picture_id
-					 $http.post('/api/pic/',
-						 {
-							 filename: picture_id,
-							 user:     Auth.currentUser()._id,
-							 hashtags: ["#kyle"]
-						 })
+
+					 var pic = {
+						 filename: picture_id,
+						 user:     Auth.currentUser()._id,
+						 hashtags: ["#kyle"]
+					 };
+
+					 $http.post('/api/pic/', pic)
 						 .success(function (data)
 						 {
 							 console.log(data);
+							 var currentUser = Auth.currentUser();
+							 currentUser.pics.push(pic);
+							 Auth.updateCurrentUser(currentUser);
 						 });
 				 },
 				 onError:         function (status)
@@ -203,6 +253,7 @@ angular.module('profile', [])
 				 },
 				 function (stream)
 				 {
+					 mediaStream = stream;
 					 if (navigator.mozGetUserMedia)
 					 {
 						 video.mozSrcObject = stream;
@@ -289,7 +340,7 @@ angular.module('profile', [])
 				 canvas.width = squareDim;
 				 canvas.height = squareDim;
 				 var widthDifference = width - height;
-				 context.drawImage(video, widthDifference/2, 0, width-widthDifference, height, 0, 0, squareDim, squareDim);
+				 context.drawImage(video, widthDifference / 2, 0, width - widthDifference, height, 0, 0, squareDim, squareDim);
 
 				 /*
 				  var squareDim = 900;
@@ -324,6 +375,44 @@ angular.module('profile', [])
 			 {
 				 clearphoto();
 			 }
+		 }
+
+
+		 // TODO: pull out below methods into helper class
+		 function userIndexOf(arr, user)
+		 {
+			 for (var i = 0; i < arr.length; i++)
+			 {
+				 if (arr[i]._id == user._id)
+				 {
+					 return i;
+				 }
+			 }
+			 return -1;
+		 }
+
+		 // convert file to blob that S3 can take
+		 function dataURItoBlob(dataURI)
+		 {
+			 var binary = atob(dataURI.split(',')[1]);
+			 var array = [];
+			 for (var i = 0; i < binary.length; i++)
+			 {
+				 array.push(binary.charCodeAt(i));
+			 }
+			 return new Blob([new Uint8Array(array)], {type: 'image/png'});
+		 }
+
+		 function generateUUID()
+		 {
+			 var d = new Date().getTime();
+			 var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c)
+			 {
+				 var r = (d + Math.random() * 16) % 16 | 0;
+				 d = Math.floor(d / 16);
+				 return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+			 });
+			 return uuid;
 		 }
 	 }]);
 

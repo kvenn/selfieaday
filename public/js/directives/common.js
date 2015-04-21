@@ -27,22 +27,39 @@ angular.module('common-directives', [])
 			}
 		}
 	}])
-	.directive('slideshow', ['$timeout', function ($timeout)
+	.directive('slideshow', ['$timeout', '$interval', function ($timeout, $interval)
 	{
 		return {
 			restrict: 'A',
 			scope:    {images: '=images'},
 			link:     function (scope, element, attrs)
 			{
+				//scope.$watch('images', function() {
+
+				//var fullPathUrl = "https://selfieaday.s3.amazonaws.com/";
+				//scope.imgIndex = 0;
+				//var timeout = $timeout(function advanceSlide()
+				//{
+				//	scope.imgIndex = (scope.imgIndex + 1) % scope.images.length;
+				//	attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
+				//	$timeout(advanceSlide, 500);
+				//});
+
 				var fullPathUrl = "https://selfieaday.s3.amazonaws.com/";
 				scope.imgIndex = 0;
-				$timeout(function advanceSlide()
+
+				var interval = $interval(function ()
 				{
-					scope.imgIndex = (scope.imgIndex + 1) % scope.images.length;
-					attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
-					$timeout(advanceSlide, 500);
+					if(scope.images.length != 0)
+						scope.imgIndex = (scope.imgIndex + 1) % scope.images.length;
+						attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
+				}, 100);
+
+				scope.$on('$destroy', function() {
+					$interval.cancel(interval);
 				});
 
+				//});
 			}
 		};
 	}])

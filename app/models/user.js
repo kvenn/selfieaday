@@ -12,6 +12,6 @@ module.exports = mongoose.model('User',
 		isPrivate:   {type: Boolean, default: false},
 		pics:        [{type: Schema.Types.ObjectId, ref: 'Pic'}],
 		comments:    [{type: Schema.Types.ObjectId, ref: 'Comment'}],
-		followers:    [{type: Schema.Types.ObjectId, ref: 'User'}],
-		following:    [{type: Schema.Types.ObjectId, ref: 'User'}]
+		followers:   [{type: Schema.Types.ObjectId, ref: 'User'}],
+		following:   [{type: Schema.Types.ObjectId, ref: 'User'}] // current_user, login, signup need following and followers and pics and comments
 	});

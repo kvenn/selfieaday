@@ -9,5 +9,5 @@ module.exports = mongoose.model('Comment',
 	{
 		text:           {type: String, default: ''},
 		author:         {type: Schema.Types.ObjectId, ref: 'User'},
-		slideshowOwner: {type: Schema.Types.ObjectId, ref: 'User'}
+		facelapseOwner: {type: Schema.Types.ObjectId, ref: 'User'}
 	});

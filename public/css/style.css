@@ -11,20 +11,22 @@
 ************************************************************************/
 
 .feed_item {
-    width: 550px;
+    width: 690px;
     /*height: 550px;*/
     padding: 25px;
     background-color:pink;
 }
 
 .photo_container {
-    height: 500px;
-    width: 500px;
-    background-color: #00b3ee;
+    /*height: 640px;*/
+    /*width: 640px;*/
+    /*background-color: #00b3ee;*/
 }
 
 .slideshow {
-    width: 500px;
+    /*width: 640px;*/
+    max-width:100%;
+    max-height:100%;
 }
 
 
@@ -34,6 +36,10 @@
 
 #profile_photo {
     width:110px;
+}
+
+.btn-follow {
+    width: 100px;
 }
 
 #video {

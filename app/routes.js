@@ -13,6 +13,8 @@ module.exports = function (app, passport)
 	/*===================================================
 	 USER API
 	 ====================================================*/
+	var userPopulateQuery = [{path:'pics', select:'filename hashtags'}, {path:'followers', select:'username'}, {path:'following', select:'username'}]
+
 	// Get all users
 	app.get('/api/user', function (req, res)
 	{
@@ -28,7 +30,7 @@ module.exports = function (app, passport)
 		}
 
 		// populate pics wit hteh actual pics they reference
-		User.find(query).populate('pics', '-password').exec(function (err, users)
+		User.find(query).populate(userPopulateQuery).exec(function (err, users)
 		{
 			if (err)
 				res.status(400).send(err);
@@ -40,11 +42,48 @@ module.exports = function (app, passport)
 	app.get('/api/user/:username', function (req, res)
 	{
 		var username = req.params.username;
-		User.findOne({username: username}).populate('pics', '-password').exec(function (err, user)
+		User.findOne({username: username}).populate(userPopulateQuery).exec(function (err, user)
 		{
 			if (err)
 				res.status(404).send(err);
 			res.json(user);
+		})
+	});
+
+	app.post('/api/follow', function (req, res)
+	{
+		var userToFollowId = req.body.userToFollowId;
+		var currentUserId = req.user._id;
+		User.update({_id: currentUserId}, {$addToSet: {following: userToFollowId}}).exec(function (err, numAffected)
+		{
+			if(err)
+				res.status(400).send(err);
+			// if successful, update the other end of the relationship to reflect their followers
+			User.update({_id: userToFollowId}, {$addToSet: {followers: currentUserId}}).exec(function (err, numAffected)
+			{
+				console.log(numAffected);
+				if(err)
+					res.status(400).send(err);
+				res.send();
+			})
+		})
+	});
+
+	app.post('/api/unfollow', function (req, res)
+	{
+		var userToUnfollowId = req.body.userToUnfollowId;
+		var currentUserId = req.user._id;
+		User.update({_id: currentUserId}, {$pull: {following: userToUnfollowId}}).exec(function (err, numAffected)
+		{
+			if(err)
+				res.status(400).send(err);
+			// if successful, update the other end of the relationship to reflect their followers
+			User.update({_id: userToUnfollowId}, {$pull: {followers: currentUserId}}).exec(function (err, numAffected)
+			{
+				if(err)
+					res.status(400).send(err);
+				res.send();
+			})
 		})
 	});
 
@@ -97,7 +136,15 @@ module.exports = function (app, passport)
 		{
 			console.log(pic);
 			// Add the pic to the users "pics" array
-			User.update({_id: req.user._id}, {$addToSet: {pics: pic._id}}).exec();
+			User.update({_id: req.user._id}, {$addToSet: {pics: pic._id}}).exec(function (err, numAffected)
+			{
+				//User.populate(user, 'pics', function (err, user)
+				//{
+					if (err)
+						res.status(404).send(err);
+					res.send();
+				//})
+			});
 		});
 	});
 
@@ -107,9 +154,9 @@ module.exports = function (app, passport)
 	app.get('/api/current_user', function (req, res)
 	{
 		// They're logged in, return the user
-		if(req.isAuthenticated())
+		if (req.isAuthenticated())
 		{
-			User.findOne({_id:req.user._id}).populate('pics', '-password').exec(function (err, user)
+			User.findOne({_id: req.user._id}).populate(userPopulateQuery).exec(function (err, user)
 			{
 				if (err)
 					res.status(400).send(err);
@@ -148,7 +195,7 @@ module.exports = function (app, passport)
 					return res.status(400).send(err);
 				}
 
-				User.findOne({_id:user._id}).populate('pics', '-password').exec(function (err, user)
+				User.findOne({_id: user._id}).populate(userPopulateQuery).exec(function (err, user)
 				{
 					if (err)
 						res.status(400).send(err);

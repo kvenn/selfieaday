@@ -1,6 +1,8 @@
 TODO:
 
 ----P1-----
+make the new user state (give them a stock 'egg' photo so their profile doesn't looks terrible)
+
 turn off camera when you leave the "your profile" page
 
 search by username and search by hashtag
@@ -16,14 +18,27 @@ order the pictures in the populate call by date
 
 order the users by some way for the feed call
 
+export as gif?
+
+BUG: pictures don't start cycling on login - have to click on profile and then back to feed?
+
+BUG: picture has like 10px of just transparency on bottom- so its not actually 640x640
+	well it is but it has that fucked up transparency
+
 
 ----P2-----
+send down user object of current logged in user when you make the call to serve the pages
+	store it in a cookie or something
+
 pre-load all images
 	http://stackoverflow.com/questions/14373683/how-to-show-image-only-when-it-is-completely-loaded
 
 prompt to download plugin for safari/ie users (for camera)
 
 find a way to tell the user to permanently accept the webrtc from our website
+	https://productforums.google.com/forum/#!topic/chrome/dayblXQVt1M
+		if over https it can say "always"
+	also you can do it manually but its a bitch
 
 make the image slideshow only appear once you scroll to it
 	http://stackoverflow.com/questions/487073/check-if-element-is-visible-after-scrolling

@@ -3,7 +3,8 @@ angular.module('auth', [])
 	{
 		var currentUser;
 		var sessionKey = 'li';
-		var loggedInVal =  '42';
+		var loggedInVal = '42';
+		var callInProgress;
 
 		return {
 			signup: function (username, password, email)
@@ -61,21 +62,28 @@ angular.module('auth', [])
 				// This will happen every refresh/new time viewing the app
 				if ($cookies[sessionKey] == loggedInVal && (currentUser == null || typeof currentUser === 'undefined'))
 				{
-					// Get the user or log the person out
-					$http
-						.get('/api/current_user')
-						.success(function (data)
-						{
-							currentUser = data.user;
-						})
-						.error(function (response, data, status, header)
-						{
-							//if(status == '404')
-							//{
-							$cookies.remove(sessionKey);
-							currentUser = null;
-							//}
-						});
+					if(!callInProgress)
+					{
+						callInProgress = true;
+						// Get the user or log the person out
+						$http
+							.get('/api/current_user')
+							.success(function (data)
+							{
+								currentUser = data.user;
+							})
+							.error(function (response, data, status, header)
+							{
+								//if(status == '404')
+								//{
+								delete $cookies[sessionKey];
+								currentUser = null;
+								//}
+							})
+							.finally(function(){
+								callInProgress = false;
+							});
+					}
 					// return true because they have the session cooking - but listen for a change in currentUser
 					return true;
 				}
@@ -88,6 +96,12 @@ angular.module('auth', [])
 				{
 					return false;
 				}
+			},
+
+			updateCurrentUser: function (user)
+			{
+				currentUser = user;
+				return currentUser;
 			},
 
 			currentUser: function ()
