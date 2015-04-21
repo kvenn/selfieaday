@@ -140,7 +140,7 @@ angular.module('profile', [])
 		 // width to the value defined here, but the height will be
 		 // calculated based on the aspect ratio of the input stream.
 
-		 var width = 500;    // We will scale the photo width to this
+		 var width = 666;    // We will scale the photo width to this
 		 var height = 0;     // This will be computed based on the input stream
 
 		 // |streaming| indicates whether or not we're currently streaming
@@ -161,13 +161,13 @@ angular.module('profile', [])
 		 // Overlap picture of video
 		 function updateLocation()
 		 {
-			 jVideo = jQuery('#video');
-			 jPhoto = jQuery('#photo');
-			 jCancel = jQuery('#cancelpicture');
+			 //var jVideo = jQuery('#video');
+			 var jPhoto = jQuery('#photo');
+			 var jCancel = jQuery('#cancelpicture');
 
-			 var offset = jVideo.offset();
+			 var offset = jPhoto.offset();
 
-			 jPhoto.offset({top: offset.top, left: offset.left});
+			 //jPhoto.offset({top: offset.top, left: offset.left});
 
 			 jCancel.offset({top: offset.top + 10, left: (offset.left + jPhoto.width()) - 30});
 		 }
@@ -255,6 +255,7 @@ angular.module('profile', [])
 				 $(uploadphoto).hide();
 
 				 $(startbutton).show();
+				 $(video).show();
 				 clearphoto();
 			 }, false);
 
@@ -279,14 +280,29 @@ angular.module('profile', [])
 			 var context = canvas.getContext('2d');
 			 if (width && height)
 			 {
-				 canvas.width = width;
-				 canvas.height = height;
-				 context.drawImage(video, 0, 0, width, height);
+				 //canvas.width = width;
+				 //canvas.height = height;
+				 //context.drawImage(video, 0, 0, width, height);
+
+
+				 var squareDim = 500;
+				 canvas.width = squareDim;
+				 canvas.height = squareDim;
+				 // draw cropped image
+				 var sourceX = 0;
+				 var sourceY = 0;
+				 var destWidth = squareDim;
+				 var destHeight = squareDim;
+
+				 var widthDifference = width - height;
+				 // move over by widthdiff/2 to crop evenly on left and right
+				 context.drawImage(video, widthDifference/2, sourceY, destWidth, destHeight, 0, 0, destWidth, destHeight);
 
 				 var data = canvas.toDataURL('image/png');
 				 photo.setAttribute('src', data);
 				 updateLocation();
 				 $(startbutton).hide();
+				 $(video).hide();
 
 				 $(cancelpicture).show();
 				 $(photo).show();

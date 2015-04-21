@@ -3,8 +3,9 @@
 <div id="feed_container">
     <div class="feed_item center-block" ng-repeat="user in users">
         <div class="photo_container center-block">
-            <img slideshow images="user.pics">
+            <img class="slideshow center-block" slideshow images="user.pics">
         </div>
-        <a href="/profile/{{user.username}}">{{user.username}}</a>
+        <a href="/profile/{{user.username}}">{{user.username}}</a> <br/>
+        <input enterpress user="user" class="form-control" placeholder="Write a comment..."/>
     </div>
 </div>

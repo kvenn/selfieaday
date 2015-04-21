@@ -32,17 +32,36 @@ angular.module('common-directives', [])
 		return {
 			restrict: 'A',
 			scope:    {images: '=images'},
-			//template: '<td>dddd: {{ ngModel.name }}</td><td>ddd: {{ ngModel.age }}</td>',
 			link:     function (scope, element, attrs)
 			{
 				var fullPathUrl = "https://selfieaday.s3.amazonaws.com/";
 				scope.imgIndex = 0;
-				$timeout(function advanceSlide() {
+				$timeout(function advanceSlide()
+				{
 					scope.imgIndex = (scope.imgIndex + 1) % scope.images.length;
 					attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
-					$timeout(advanceSlide, 1000);
+					$timeout(advanceSlide, 500);
 				});
 
 			}
 		};
-	}]);
+	}])
+	.directive('enterpress', function ()
+	{
+		return {
+			scope: {user: '=user'},
+			link:  function (scope, element, attrs)
+			{
+				element.bind("keydown keypress", function (event)
+				{
+					if (event.which === 13)
+					{
+						// submit this comment for this user
+						console.log(scope.user);
+
+						event.preventDefault();
+					}
+				});
+			}
+		}
+	});

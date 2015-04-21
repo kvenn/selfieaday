@@ -7,6 +7,13 @@ search by username and search by hashtag
 
 email
 
+taking a picture and then signing out doesn't update the global model
+	a refresh doesn't even update the global model I don't think
+	or maybe the directive isn't working entirely correclty...
+
+order the pictures in the populate call by date
+
+order the users by some way for the feed call
 
 
 ----P2-----
@@ -16,3 +23,10 @@ pre-load all images
 prompt to download plugin for safari/ie users (for camera)
 
 find a way to tell the user to permanently accept the webrtc from our website
+
+make the image slideshow only appear once you scroll to it
+	http://stackoverflow.com/questions/487073/check-if-element-is-visible-after-scrolling
+	http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport/7557433#7557433
+	http://morr.github.io/appear.html
+
+put in lines for eyes and middle of face (and a gray outline that shows how it will be saved)

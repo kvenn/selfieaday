@@ -23,14 +23,20 @@ angular.module('feed', [])
 			 .success(function (data)
 			 {
 				 $scope.users = data;
-
-				 //$scope.images = data[1].pics;
-				 //
-				 //$scope.imgIndex = 0;
-				 //$timeout(function advanceSlide() {
-					// $scope.imgIndex = ($scope.imgIndex + 1) % $scope.images.length;
-					// $timeout(advanceSlide, 500);
-				 //});
 			 });
+
+		 // Check if enter was pressed
+		 $(document).keypress(function (e)
+		 {
+			 if (e.which == 13)
+			 {
+				 // Get the focused element:
+				 var focused = $(':focus');
+				 if(focused.is('input'))
+				 {
+
+				 }
+			 }
+		 });
 
 	 }]);

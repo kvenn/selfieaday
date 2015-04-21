@@ -11,15 +11,20 @@
 ************************************************************************/
 
 .feed_item {
-    width: 600px;
-    height: 700px;
-    padding: 10px;
+    width: 550px;
+    /*height: 550px;*/
+    padding: 25px;
     background-color:pink;
 }
 
 .photo_container {
-    height: 550px;
+    height: 500px;
+    width: 500px;
     background-color: #00b3ee;
+}
+
+.slideshow {
+    width: 500px;
 }
 
 
