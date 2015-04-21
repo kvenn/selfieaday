@@ -48,3 +48,12 @@ LOGIN/SIGNUP: (/login and /signup)
 SETTINGS:
 	daily email config - time of day
 	private/public toggle
+
+
+
+AUTH/SESSION
+	when log in you get a cookie with the user
+		if you leave and come back and we see the cookie, we get the user - if there is no user, we send a 404 and delete the cookie
+		if cookie and !user
+	is logged in just relies on that cookie - if expired/non existent, you have to log in again
+	every call that pertains to your user brings it back and sets it on the Auth singleton
