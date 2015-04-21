@@ -15,7 +15,7 @@ module.exports = function (passport)
 			// asynchronous
 			process.nextTick(function ()
 			{
-				User.findOne({'username': username}, function (err, user)
+				User.findOne({'username': username}).select('+password').exec(function (err, user)
 				{
 					// if there are any errors, return the error
 					if (err)

@@ -28,7 +28,7 @@ module.exports = function (app, passport)
 		}
 
 		// populate pics wit hteh actual pics they reference
-		User.find(query).populate('pics').exec(function (err, users)
+		User.find(query).populate('pics', '-password').exec(function (err, users)
 		{
 			if (err)
 				res.status(400).send(err);
@@ -40,7 +40,7 @@ module.exports = function (app, passport)
 	app.get('/api/user/:username', function (req, res)
 	{
 		var username = req.params.username;
-		User.findOne({username: username}).populate('pics').exec(function (err, user)
+		User.findOne({username: username}).populate('pics', '-password').exec(function (err, user)
 		{
 			if (err)
 				res.status(404).send(err);
@@ -104,13 +104,24 @@ module.exports = function (app, passport)
 	/*===================================================
 	 AUTH API
 	 ====================================================*/
-	app.get('/api/is_logged_in', function (req, res)
+	app.get('/api/current_user', function (req, res)
 	{
-		return res.json(
+		// They're logged in, return the user
+		if(req.isAuthenticated())
+		{
+			User.findOne({_id:req.user._id}).populate('pics', '-password').exec(function (err, user)
 			{
-				loggedIn: isLoggedIn(req, res),
-				user:     req.user
+				if (err)
+					res.status(400).send(err);
+				return res.json({
+					user: user
+				})
 			});
+		}
+		else
+		{
+			res.status(404).send('Not found');
+		}
 	});
 
 	// process the login form
@@ -136,10 +147,15 @@ module.exports = function (app, passport)
 				{
 					return res.status(400).send(err);
 				}
-				return res.json(
-					{
+
+				User.findOne({_id:user._id}).populate('pics', '-password').exec(function (err, user)
+				{
+					if (err)
+						res.status(400).send(err);
+					return res.json({
 						user: user
-					});//next();//res.json({redirect: '/profile'});
+					})
+				});
 			});
 		})(req, res);
 	});
@@ -195,8 +211,3 @@ module.exports = function (app, passport)
 		res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
 	});
 };
-
-function isLoggedIn(req, res)
-{
-	return req.isAuthenticated();
-}

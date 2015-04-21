@@ -1,35 +1,33 @@
 <div class="row">
 
-    <div class="col-sm-6">
+    <div class="col-sm-12">
         <div class="well">
-            <h3><span class="fa fa-user"></span> Local</h3>
 
+            <!--If there's a user to show-->
             <container ng-show="user.username">
-                <p>
-                    <strong>id</strong>: {{ user._id }}<br>
-                    <strong>email</strong>: {{ user.email }}<br>
-                    <strong>username</strong>: {{ user.username }}<br>
-                    <strong>password</strong>: {{ user.password }}
-                </p>
+                <div id="user" class="row">
+                    <img class="col-sm-2" id="profile_photo" src="{{basePhotoUrl}}{{user.pics[user.pics.length-1].filename}}">
+                    <h2 class="col-sm-4">{{user.username}}</h2>
+                    <div id="user_info" class="col-sm-2 pull-right">
+                        <p>{{user.pics.length}} Photos</p>
+                    </div>
+                </div>
             </container>
 
-            <container ng-show="isLoggedIn">
+            <!-- This is the current user -->
+            <container ng-show="isCurrentProfile" class="center-block text-center">
 
                 <div class="camera">
                     <video id="video">Video stream not available.</video>
                     <button id="startbutton" class="btn-lg btn-primary">Take photo</button>
+                    <a id="uploadphoto" ng-click="uploadPhoto()">Save Photo</a>
+                    <p id="status">Take a photo and save it.</p>
                 </div>
+                <img id="photo" alt="">
+                <span id="cancelpicture" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+
                 <canvas id="canvas">
                 </canvas>
-                <!--<div class="output">-->
-                    <img id="photo" alt="The screen capture will appear in this box.">
-                    <a id="cancelpicture" class="icon"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a>
-                <!--</div>-->
-
-
-                <a ng-click="uploadPhoto()">Upload photo</a>
-                <p id="status">Please select a file</p>
-
             </container>
 
             <container ng-show="errorMessage">

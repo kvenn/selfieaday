@@ -12,9 +12,12 @@ angular.module('profile', [])
 	}])
 
 	.controller('ProfileController',
-	['$http', '$scope', '$routeParams', 'Auth',
-	 function ($http, $scope, $routeParams, Auth)
+	['$http', '$scope', '$routeParams', '$route', 'Auth',
+	 function ($http, $scope, $routeParams, $route, Auth)
 	 {
+		 // TODO: make global (rootscope?)
+		 $scope.basePhotoUrl = "https://selfieaday.s3.amazonaws.com/";
+
 		 var username = $routeParams.username;
 		 if (username)
 		 {
@@ -33,18 +36,32 @@ angular.module('profile', [])
 		 }
 		 else
 		 {
-			 if (Auth.isLoggedIn())
+			 $scope.$watch(Auth.currentUser, function (currentUser)
 			 {
-				 $scope.user = Auth.currentUser();
-				 $scope.isLoggedIn = Auth.isLoggedIn();
-				 $scope.isCurrentProfile = true; // they're viewing their own profile
-			 }
-			 else
-			 {
-				 $scope.errorMessage = "Please log in to view your profile."
-			 }
+				 var loggedIn = Auth.isLoggedIn();
+				 if (loggedIn)
+				 {
+					 $scope.isLoggedIn = loggedIn;
+					 $scope.user = currentUser;
+					 $scope.isCurrentProfile = true; // they're viewing their own profile
+				 }
+				 else
+				 {
+					 $scope.errorMessage = "Please log in to view your profile."
+					 $scope.isLoggedIn = loggedIn;
+					 $scope.user = null;
+					 $scope.isCurrentProfile = false;
+				 }
+			 });
 		 }
 
+		 // Might need to wait for onload?
+		 // Only start camera if this is the current users profile
+		 $scope.$watch($scope.isCurrentProfile, function (currentUser)
+		 {
+			 if ($scope.isCurrentProfile && !streaming)
+				 startup();
+		 });
 
 		 /*===================================================
 		  PHOTO UPLOAD
@@ -139,6 +156,7 @@ angular.module('profile', [])
 		 var photo = null;
 		 var startbutton = null;
 		 var cancelpicture = null;
+		 var uploadphoto = null;
 
 		 // Overlap picture of video
 		 function updateLocation()
@@ -151,7 +169,7 @@ angular.module('profile', [])
 
 			 jPhoto.offset({top: offset.top, left: offset.left});
 
-			 jCancel.offset({top: offset.top+10, left: (offset.left + jPhoto.width())-30});
+			 jCancel.offset({top: offset.top + 10, left: (offset.left + jPhoto.width()) - 30});
 		 }
 
 		 $(window).resize(function ()
@@ -166,9 +184,11 @@ angular.module('profile', [])
 			 photo = document.getElementById('photo');
 			 startbutton = document.getElementById('startbutton');
 			 cancelpicture = document.getElementById('cancelpicture');
+			 uploadphoto = document.getElementById('uploadphoto');
 
 			 $(cancelpicture).hide();
 			 $(photo).hide();
+			 $(uploadphoto).hide();
 
 			 navigator.getMedia = (navigator.getUserMedia ||
 								   navigator.webkitGetUserMedia ||
@@ -232,6 +252,7 @@ angular.module('profile', [])
 			 {
 				 $(cancelpicture).hide();
 				 $(photo).hide();
+				 $(uploadphoto).hide();
 
 				 $(startbutton).show();
 				 clearphoto();
@@ -269,17 +290,12 @@ angular.module('profile', [])
 
 				 $(cancelpicture).show();
 				 $(photo).show();
+				 $(uploadphoto).show();
 			 }
 			 else
 			 {
 				 clearphoto();
 			 }
 		 }
-
-		 // Might need to wait for onload?
-		 // Only start camera if this is the current users profile
-		 if ($scope.isCurrentProfile && !streaming)
-			 startup()
-
 	 }]);
 

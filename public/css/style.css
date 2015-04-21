@@ -23,8 +23,13 @@
 }
 
 
+/************************************************************************
+**************************     PROFILE
+************************************************************************/
 
-
+#profile_photo {
+    width:110px;
+}
 
 #video {
     /*border: 1px solid black;*/
@@ -40,15 +45,15 @@
     display:none;
 }
 
-.camera {
-    display:inline-block;
-}
-
-.output {
-    display:inline-block;
-}
 
 #startbutton {
+    display:block;
+    position:relative;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#uploadphoto {
     display:block;
     position:relative;
     margin-left:auto;
@@ -59,12 +64,7 @@
     margin:5px;
 }
 
-.glyphicon.glyphicon-globe {
+.glyphicon.glyphicon-remove {
     font-size: 20px;
-}
-
-.contentarea {
-    font-size: 16px;
-    font-family: "Lucida Grande", "Arial", sans-serif;
-    width: 760px;
+    color: white;
 }

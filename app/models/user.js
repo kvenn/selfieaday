@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 module.exports = mongoose.model('User',
 	{
 		username:    String,
-		password:    String,
+		password:    {type: String, select: false},
 		email:       String,
 		phoneNumber: String,
 		pics:        [{type: Schema.Types.ObjectId, ref: 'Pic'}],
