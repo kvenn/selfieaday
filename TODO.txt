@@ -21,9 +21,12 @@ order the users by some way for the feed call
 export as gif?
 
 BUG: pictures don't start cycling on login - have to click on profile and then back to feed?
+	or soemtiems it just stops entirely, but closing the tab and going back in fixes it
 
 BUG: picture has like 10px of just transparency on bottom- so its not actually 640x640
 	well it is but it has that fucked up transparency
+
+BUG: profile/myusername shows you profile as if it's not yours
 
 
 ----P2-----
@@ -48,3 +51,6 @@ make the image slideshow only appear once you scroll to it
 put in lines for eyes and middle of face (and a gray outline that shows how it will be saved)
 
 button that toggles the overlay of the last image
+
+tell the browswer to cache the images indefinitely
+	https://developers.google.com/speed/docs/insights/LeverageBrowserCaching
