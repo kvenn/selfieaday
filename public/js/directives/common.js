@@ -13,20 +13,22 @@ angular.module('common-directives', [])
 			}
 		}
 	}])
-	.directive('logout', ['$http', function ($http)
-	{
-		return {
-			restrict: 'A',
-			link:     function (scope, element, attrs)
-			{
-				element.on('click', function (e)
-				{
-					e.preventDefault();
-					$http.post('/logout');
-				});
-			}
-		}
-	}])
+	//.directive('logout', ['$http', function ($http)
+	//{
+	//	return {
+	//		restrict: 'A',
+	//		link:     function (scope, element, attrs)
+	//		{
+	//			element.on('click', function (e)
+	//			{
+	//				e.preventDefault();
+	//				$http.post('/logout');
+	//
+	//				scope.logoutEvent();
+	//			});
+	//		}
+	//	}
+	//}])
 	.directive('slideshow', ['$timeout', '$interval', function ($timeout, $interval)
 	{
 		return {
@@ -35,15 +37,6 @@ angular.module('common-directives', [])
 			link:     function (scope, element, attrs)
 			{
 				//scope.$watch('images', function() {
-
-				//var fullPathUrl = "https://selfieaday.s3.amazonaws.com/";
-				//scope.imgIndex = 0;
-				//var timeout = $timeout(function advanceSlide()
-				//{
-				//	scope.imgIndex = (scope.imgIndex + 1) % scope.images.length;
-				//	attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
-				//	$timeout(advanceSlide, 500);
-				//});
 
 				var fullPathUrl = "https://selfieaday.s3.amazonaws.com/";
 				scope.imgIndex = 0;
@@ -59,7 +52,6 @@ angular.module('common-directives', [])
 					$interval.cancel(interval);
 				});
 
-				//});
 			}
 		};
 	}])

@@ -13,7 +13,9 @@ module.exports = function (app, passport)
 	/*===================================================
 	 USER API
 	 ====================================================*/
-	var userPopulateQuery = [{path:'pics', select:'filename hashtags'}, {path:'followers', select:'username'}, {path:'following', select:'username'}]
+	var userPopulateQuery = [{path: 'pics', select: 'filename hashtags'},
+							 {path: 'followers', select: 'username'},
+							 {path: 'following', select: 'username'}];
 
 	// Get all users
 	app.get('/api/user', function (req, res)
@@ -56,13 +58,13 @@ module.exports = function (app, passport)
 		var currentUserId = req.user._id;
 		User.update({_id: currentUserId}, {$addToSet: {following: userToFollowId}}).exec(function (err, numAffected)
 		{
-			if(err)
+			if (err)
 				res.status(400).send(err);
 			// if successful, update the other end of the relationship to reflect their followers
 			User.update({_id: userToFollowId}, {$addToSet: {followers: currentUserId}}).exec(function (err, numAffected)
 			{
 				console.log(numAffected);
-				if(err)
+				if (err)
 					res.status(400).send(err);
 				res.send();
 			})
@@ -75,12 +77,12 @@ module.exports = function (app, passport)
 		var currentUserId = req.user._id;
 		User.update({_id: currentUserId}, {$pull: {following: userToUnfollowId}}).exec(function (err, numAffected)
 		{
-			if(err)
+			if (err)
 				res.status(400).send(err);
 			// if successful, update the other end of the relationship to reflect their followers
 			User.update({_id: userToUnfollowId}, {$pull: {followers: currentUserId}}).exec(function (err, numAffected)
 			{
-				if(err)
+				if (err)
 					res.status(400).send(err);
 				res.send();
 			})
@@ -140,9 +142,9 @@ module.exports = function (app, passport)
 			{
 				//User.populate(user, 'pics', function (err, user)
 				//{
-					if (err)
-						res.status(404).send(err);
-					res.send();
+				if (err)
+					res.status(404).send(err);
+				res.send();
 				//})
 			});
 		});
@@ -199,6 +201,8 @@ module.exports = function (app, passport)
 				{
 					if (err)
 						res.status(400).send(err);
+
+					console.log("login:" + user);
 					return res.json({
 						user: user
 					})
@@ -253,8 +257,54 @@ module.exports = function (app, passport)
 	 Front end routes
 	 ====================================================*/
 	// route to handle all angular requests
-	app.get('*', function (req, res)
-	{
-		res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
+	app.get('*', function (req, res){
+		console.log("get *");
+
+		if (req.isAuthenticated())
+		{
+			User.findOne({_id: req.user._id}).populate(userPopulateQuery).exec(function (err, user)
+			{
+				if (err)
+					res.status(400).send(err);
+
+				console.log("cookie:" +  JSON.stringify(user));
+				res.cookie('u', JSON.stringify(user), { maxAge: 900000});
+				res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
+			});
+		}
+		else
+		{
+			res.cookie('u', '', { maxAge: 900000});
+			res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
+		}
 	});
+	//app.all(/^\/.*/, function (req, res) {
+	//app.all('*', function(err,req,res,next) {
+	//app.use(function(req, res, next){
+	//	console.log("hit0");
+	//	// They're logged in, return the user
+	//	if (req.isAuthenticated())
+	//	{
+	//		console.log("hit1");
+	//		User.findOne({_id: req.user._id}).populate(userPopulateQuery).exec(function (err, user)
+	//		{
+	//			if (err)
+	//				res.status(400).send(err);
+	//
+	//			console.log("hit2");
+	//			res.cookie('u', user.toString(), { maxAge: 900000});
+	//			console.log("cookie");
+	//			//res.json({current_user: user})
+	//			res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
+	//		});
+	//	}
+	//	//else
+	//	//{
+	//	//	res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
+	//	//}
+	//	next();
+	//});
+
+
+
 };

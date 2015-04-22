@@ -5,11 +5,16 @@
  */
 
 angular.module('httpFactory', [])
-	.factory('myHttpResponseInterceptor', ['$q', '$location', 'growl', function ($q, $location, growl)
+	.factory('myHttpResponseInterceptor', ['$q', '$location', 'growl', '$cookies', '$injector', function ($q, $location, growl, $cookies, $injector)
 	{
 		return {
 			response:      function (response)
 			{
+				if (!!$cookies['u'])
+				{
+					var user = JSON.parse($cookies['u']);
+					$injector.get('Auth').updateCurrentUser(user);
+				}
 				if (typeof response.data === 'object')
 				{
 					if (response.data.redirect)

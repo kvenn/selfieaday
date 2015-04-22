@@ -28,7 +28,7 @@ angular.module('profile', [])
 
 		 var username = $routeParams.username;
 		 // Viewing a user
-		 if (username)
+		 if (username && username != $scope.currentUser.username)
 		 {
 			 $http.get('/api/user/' + username)
 				 .success(function (data)
@@ -48,35 +48,50 @@ angular.module('profile', [])
 				 });
 			 $scope.isCurrentProfile = false;
 		 }
-		 $scope.$watch(Auth.currentUser, function (currentUser)
+		 else
 		 {
-			 $scope.isLoggedIn = Auth.isLoggedIn();
-			 $scope.currentUser = Auth.currentUser();
-			 // viewing a user
-			 if (username)
+			 if ($scope.isLoggedIn)
 			 {
-				 if ($scope.currentUser && $scope.user)
-				 {
-					 $scope.isFollowing = userIndexOf($scope.currentUser.following, $scope.user) != -1
-				 }
+				 // viewing their own profile
+				 $scope.user = $scope.currentUser;
+				 $scope.isCurrentProfile = true; // they're viewing their own profile
 			 }
-			 // Viewing your own profile (if you're logged in)
 			 else
 			 {
-				 if ($scope.isLoggedIn)
-				 {
-					 $scope.user = currentUser;
-					 $scope.isCurrentProfile = true; // they're viewing their own profile
-				 }
-				 else
-				 {
-					 $scope.errorMessage = "Please log in to view your profile.";
-					 $scope.user = null;
-					 $scope.isCurrentProfile = false;
-				 }
+				 $scope.errorMessage = "Please log in to view your profile.";
+				 $scope.user = null;
+				 $scope.isCurrentProfile = false;
 			 }
-
-		 });
+		 }
+		 //$scope.$watch(Auth.currentUser, function (currentUser)
+		 //{
+			// $scope.isLoggedIn = Auth.isLoggedIn();
+			// $scope.currentUser = Auth.currentUser();
+			// // viewing a user
+			// if (username)
+			// {
+			//	 if ($scope.currentUser && $scope.user)
+			//	 {
+			//		 $scope.isFollowing = userIndexOf($scope.currentUser.following, $scope.user) != -1
+			//	 }
+			// }
+			// // Viewing your own profile (if you're logged in)
+			// else
+			// {
+			//	 if ($scope.isLoggedIn)
+			//	 {
+			//		 $scope.user = currentUser;
+			//		 $scope.isCurrentProfile = true; // they're viewing their own profile
+			//	 }
+			//	 else
+			//	 {
+			//		 $scope.errorMessage = "Please log in to view your profile.";
+			//		 $scope.user = null;
+			//		 $scope.isCurrentProfile = false;
+			//	 }
+			// }
+		 //
+		 //});
 
 		 // Turn off camera once you leave the profile
 		 $scope.$on('$destroy', function ()
