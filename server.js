@@ -38,43 +38,8 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 // for parsing multipart/form-data
 app.use(multer());
 
-
-//--------------------
-//var User = require('./app/models/user');
-//var userPopulateQuery = [{path: 'pics', select: 'filename hashtags'},
-//						 {path: 'followers', select: 'username'},
-//						 {path: 'following', select: 'username'}];
-
-
-//--------------------
-
-
 // set the static files location /public/img will be /img for users
 app.use(express.static(__dirname + '/public'));
-
-
-
-//app.use(function(req, res, next){
-//	// They're logged in, return the user
-//	if (req.isAuthenticated())
-//	{
-//		User.findOne({_id: req.user._id}).populate(userPopulateQuery).exec(function (err, user)
-//		{
-//			if (err)
-//				res.status(400).send(err);
-//
-//			console.log("cookie:" +  JSON.stringify(user));
-//			res.cookie('u', JSON.stringify(user), { maxAge: 900000});
-//		});
-//	}
-//	else
-//	{
-//		res.cookie('u', '', { maxAge: 900000});
-//	}
-//	next();
-//});
-
-
 
 //  Set the environment variables we need.
 ipaddress = process.env.OPENSHIFT_NODEJS_IP;

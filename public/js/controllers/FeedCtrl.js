@@ -3,21 +3,12 @@
 angular.module('feed', [])
 	.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider)
 	{
-		//$routeProvider
-		//	.when('/profile', {
-		//		templateUrl:  '/views/profile.html',
-		//		controller:   'ProfileController',
-		//		controllerAs: 'profile'
-		//	});
-
 		$locationProvider.html5Mode(true);
 	}])
 	.controller('FeedController',
 	['$http', '$scope', '$routeParams', '$timeout',
 	 function ($http, $scope, $routeParams, $timeout)
 	 {
-		 // TODO pull out to global
-		 //$scope.basePhotoUrl = "https://selfieaday.s3.amazonaws.com/";
 
 		 $scope.getUsers = function()
 		 {

@@ -278,33 +278,4 @@ module.exports = function (app, passport)
 			res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
 		}
 	});
-	//app.all(/^\/.*/, function (req, res) {
-	//app.all('*', function(err,req,res,next) {
-	//app.use(function(req, res, next){
-	//	console.log("hit0");
-	//	// They're logged in, return the user
-	//	if (req.isAuthenticated())
-	//	{
-	//		console.log("hit1");
-	//		User.findOne({_id: req.user._id}).populate(userPopulateQuery).exec(function (err, user)
-	//		{
-	//			if (err)
-	//				res.status(400).send(err);
-	//
-	//			console.log("hit2");
-	//			res.cookie('u', user.toString(), { maxAge: 900000});
-	//			console.log("cookie");
-	//			//res.json({current_user: user})
-	//			res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
-	//		});
-	//	}
-	//	//else
-	//	//{
-	//	//	res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
-	//	//}
-	//	next();
-	//});
-
-
-
 };
