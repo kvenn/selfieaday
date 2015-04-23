@@ -36,16 +36,21 @@ angular.module('common-directives', [])
 			scope:    {images: '=images'},
 			link:     function (scope, element, attrs)
 			{
-				//scope.$watch('images', function() {
-
 				var fullPathUrl = "https://selfieaday.s3.amazonaws.com/";
 				scope.imgIndex = 0;
 
 				var interval = $interval(function ()
 				{
 					if (scope.images.length != 0)
+					{
 						scope.imgIndex = (scope.imgIndex + 1) % scope.images.length;
-					attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
+						attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
+					}
+					else
+					{
+						attrs.$set('src', fullPathUrl + 'blank');
+					}
+
 				}, 200);
 
 				scope.$on('$destroy', function ()

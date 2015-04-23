@@ -5,10 +5,12 @@ position the camera in a better place and chop off the sides XXX
 	make it resizable (with the window) XXX
 	hide/show camera work XXX
 make show more comments work
+fix need to refresh after log in
 default profile picture and stuff
 have people's profiles reflect their comments and likes
 search
 hashtags
+settings
 
 ----P1-----
 make the new user state (give them a stock 'egg' photo so their profile doesn't looks terrible)

@@ -87,7 +87,8 @@ a {
 .like_btn {
     font-size: 20px;
     color: gray;
-    cursor:pointer;
+    /*cursor:pointer;*/
+    /* TODO: PUT IN LIKE BTN ONCE ITS IMPLEMENTED */
     padding-left:0;
     line-height: 13px;
 }
@@ -132,6 +133,11 @@ a {
     padding:0;
 }
 
+.placeholder_img {
+    background-image: url('https://selfieaday.s3.amazonaws.com/blank');
+    max-width: 100%;
+    height: auto;
+}
 
 #facelapse_container {
     padding:0;

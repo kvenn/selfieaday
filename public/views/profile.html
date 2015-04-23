@@ -28,7 +28,8 @@
                 </div>
 
                 <div id="user" class="col-sm-6">
-                    <img class="col-sm-2 profile_thumbnail" src="{{basePhotoUrl}}{{user.pics[user.pics.length-1].filename}}">
+                    <img class="col-sm-2 profile_thumbnail"
+                         src="{{basePhotoUrl}}{{!!(user.pics[user.pics.length-1].filename) ? (user.pics[user.pics.length-1].filename) : 'blank'}}">
 
                     <h2 class="col-sm-3">{{user.username}}</h2>
 
