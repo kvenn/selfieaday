@@ -33,18 +33,28 @@
     width:110px;
 }
 
-.btn-follow {
+#facelapse_container {
+    padding:0;
+}
+
+#video_container {
+    /*max-width: 640px;*/
+    overflow:hidden;
+    padding:0;
+    /*display:block;*/
+    /*height: 360px;*/
+}
+
+.btn_follow {
     width: 100px;
 }
 
 #video {
-    /*border: 1px solid black;*/
-    /*box-shadow: 2px 2px 3px black;*/
 }
 
-#photo {
-    /*border: 1px solid black;*/
-    /*box-shadow: 2px 2px 3px black;*/
+#camera_photo {
+    max-width: 100%;
+    height: auto;
 }
 
 #canvas {

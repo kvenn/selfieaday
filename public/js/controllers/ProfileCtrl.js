@@ -24,7 +24,8 @@ angular.module('profile', [])
 		 $scope.currentUser = Auth.currentUser();
 
 		 // TODO this will be replaced by global user
-		 $scope.$watch( Auth.currentUser, function ( currentUser ) {
+		 $scope.$watch(Auth.currentUser, function (currentUser)
+		 {
 			 $scope.isLoggedIn = Auth.isLoggedIn();
 			 $scope.currentUser = currentUser;
 			 if ($scope.isLoggedIn && $scope.isCurrentProfile)
@@ -36,7 +37,6 @@ angular.module('profile', [])
 
 		 var mediaStream;
 		 // TODO: just set the css to hide by default
-		 $("#camera").hide();
 
 		 var username = $routeParams.username;
 		 // Viewing a user
@@ -90,14 +90,12 @@ angular.module('profile', [])
 		  ====================================================*/
 		 $scope.showCamera = function ()
 		 {
-			 $scope.cameraOn = true;
-			 $("#camera").show();
+			 $scope.photoMode = true;
 			 startup();
 		 };
 		 $scope.hideCamera = function ()
 		 {
-			 $scope.cameraOn = false;
-			 $("#camera").hide();
+			 $scope.photoMode = false;
 			 mediaStream.stop();
 		 };
 
@@ -139,7 +137,7 @@ angular.module('profile', [])
 		 $scope.uploadPhoto = function ()
 		 {
 			 // Convert the data blob to a file to send to S3
-			 var png_blob = document.getElementById("photo").src;
+			 var png_blob = document.getElementById("camera_photo").src;
 
 			 var picture_id = generateUUID();
 
@@ -184,12 +182,6 @@ angular.module('profile', [])
 		 /*===================================================
 		  CAMERA SETUP
 		  ====================================================*/
-		 // The width and height of the captured photo. We will set the
-		 // width to the value defined here, but the height will be
-		 // calculated based on the aspect ratio of the input stream.
-
-		 var width = 666;    // We will scale the photo width to this
-		 var height = 0;     // This will be computed based on the input stream
 
 		 // |streaming| indicates whether or not we're currently streaming
 		 // video from the camera. Obviously, we start at false.
@@ -210,7 +202,7 @@ angular.module('profile', [])
 		 function updateLocation()
 		 {
 			 //var jVideo = jQuery('#video');
-			 var jPhoto = jQuery('#photo');
+			 var jPhoto = jQuery('#camera_photo');
 			 var jCancel = jQuery('#cancelpicture');
 
 			 var offset = jPhoto.offset();
@@ -218,6 +210,18 @@ angular.module('profile', [])
 			 //jPhoto.offset({top: offset.top, left: offset.left});
 
 			 jCancel.offset({top: offset.top + 10, left: (offset.left + jPhoto.width()) - 30});
+
+			 //var oldWidth = video.width;
+			 video.width = (4/3) * $("#video_container").width();
+			 //var widthDifference = video.width - oldWidth;
+			 //$(video).offset({left:-(widthDifference/2)})
+
+			 var widthDifference = video.width - (video.width*(3/4));
+			 console.log(video.width);
+			 console.log(widthDifference);
+			 console.log($(video).offset());
+			 //$(video).offset({left:(widthDifference/2)});
+			 $(video).css('margin-left','-'+widthDifference/2+'px');
 		 }
 
 		 $(window).resize(function ()
@@ -225,11 +229,13 @@ angular.module('profile', [])
 			 updateLocation();
 		 });
 
+		 $scope.photoMode = false;
+
 		 function startup()
 		 {
 			 video = document.getElementById('video');
 			 canvas = document.getElementById('canvas');
-			 photo = document.getElementById('photo');
+			 photo = document.getElementById('camera_photo');
 			 startbutton = document.getElementById('startbutton');
 			 cancelpicture = document.getElementById('cancelpicture');
 			 uploadphoto = document.getElementById('uploadphoto');
@@ -273,19 +279,6 @@ angular.module('profile', [])
 			 {
 				 if (!streaming)
 				 {
-					 height = video.videoHeight / (video.videoWidth / width);
-
-					 // Firefox currently has a bug where the height can't be read from
-					 // the video, so we will make assumptions if this happens.
-					 if (isNaN(height))
-					 {
-						 height = width / (4 / 3);
-					 }
-
-					 video.setAttribute('width', width);
-					 video.setAttribute('height', height);
-					 //canvas.setAttribute('width', width);
-					 //canvas.setAttribute('height', height);
 					 streaming = true;
 				 }
 			 }, false);
@@ -322,57 +315,43 @@ angular.module('profile', [])
 		 // Capture a photo by fetching the current contents of the video
 		 // and drawing it into a canvas, then converting that to a PNG
 		 // format data URL. By drawing it on an offscreen canvas and then
-		 // drawing that to the screen, we can change its size and/or apply
-		 // other changes before drawing it.
+		 // drawing that to the screen, then we can change its size
 		 function takepicture()
 		 {
 			 var context = canvas.getContext('2d');
-			 if (width && height)
-			 {
-				 //canvas.width = width;
-				 //canvas.height = height;
-				 //context.drawImage(video, 0, 0, width, height);
 
-				 // all of our images in the database should be exactly squareDim by squareDim
-				 var squareDim = 640;
-				 canvas.width = squareDim;
-				 canvas.height = squareDim;
-				 var widthDifference = width - height;
-				 context.drawImage(video, widthDifference / 2, 0, width - widthDifference, height, 0, 0, squareDim, squareDim);
+			 // all of our images in the database should be exactly squareDim by squareDim
+			 var squareDim = 640;
+			 canvas.width = squareDim;
+			 canvas.height = squareDim;
+			 //var widthDifference = width - height;
+			 var widthDifference = $(video).width() - $(video).height();
 
-				 /*
-				  var squareDim = 900;
-				  canvas.width = squareDim;
-				  canvas.height = squareDim;
-				  // draw cropped image
-				  var sourceX = 0;
-				  var sourceY = 0;
-				  var destWidth = squareDim;
-				  var destHeight = squareDim;
+			 //context.drawImage(video, 80, 0, $(video).height()-(widthDifference/2)-30, $(video).height()-(widthDifference/2)-30, 0, 0, squareDim, squareDim);
+			 //context.drawImage(video, 80, 0, $(video).height()+23, $(video).height()+23, 0, 0, squareDim, squareDim); // windo 560px
+			 context.drawImage(video, 80, 0, 480, 480, 0, 0, squareDim, squareDim);
 
-				  var widthDifference = width - height;
-				  // move over by widthdiff/2 to crop evenly on left and right
-				  context.drawImage(video, widthDifference/2, sourceY, destWidth, destHeight, 0, 0, destWidth, destHeight);
-				  */
+			 //context.drawImage(video, 0, 0, $(video).height()-(widthDifference/2), $(video).height()-(widthDifference/2), 0, 0, squareDim, squareDim);
+			 // ^^^ that is actually kind of close
 
-				 var data = canvas.toDataURL('image/png');
-				 photo.setAttribute('src', data);
-				 // shrink the image to be the same size as the video so it looks normal (but also account for the square cropping)
-				 photo.setAttribute('width', height);
-				 photo.setAttribute('height', height);
 
-				 updateLocation();
-				 $(startbutton).hide();
-				 $(video).hide();
+			 //context.drawImage(video, widthDifference/2, 0, $(video).width() - widthDifference, $(video).height(), 0, 0, squareDim, squareDim);
+			 //context.drawImage(video, widthDifference/2, 0, width - widthDifference, height, 0, 0, squareDim, squareDim);
 
-				 $(cancelpicture).show();
-				 $(photo).show();
-				 $(uploadphoto).show();
-			 }
-			 else
-			 {
-				 clearphoto();
-			 }
+
+			 var data = canvas.toDataURL('image/png');
+			 photo.setAttribute('src', data);
+			 // shrink the image to be the same size as the video so it looks normal (but also account for the square cropping)
+			 //photo.setAttribute('width', squareDim);
+			 //photo.setAttribute('height', squareDim);
+
+			 updateLocation();
+			 $(startbutton).hide();
+			 $(video).hide();
+
+			 $(cancelpicture).show();
+			 $(photo).show();
+			 $(uploadphoto).show();
 		 }
 
 
@@ -417,8 +396,8 @@ angular.module('profile', [])
 		 function toSimpleUser(user)
 		 {
 			 return {
-				 _id : user._id,
-				 username : user.username
+				 _id:      user._id,
+				 username: user.username
 			 }
 		 }
 	 }]);
