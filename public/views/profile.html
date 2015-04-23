@@ -5,11 +5,11 @@
 
             <!-- If there's a user to show -->
             <container ng-show="user.username" class="row">
-                <div ng-hide="photoMode" id="facelapse_container" class="col-lg-7">
+                <div ng-hide="photoMode" id="facelapse_container" class="col-sm-6">
                     <img class="slideshow" slideshow images="user.pics">
                 </div>
                 <!-- This is the current user -->
-                <div ng-show="photoMode" class="col-lg-7 center-block text-center">
+                <div ng-show="photoMode" class="col-sm-6 center-block text-center">
                     <div id="video_container" ng-hide="viewingPhoto">
                         <video id="video" width="100%">Video stream not available.</video>
                         <span id="startbutton" class="glyphicon glyphicon-camera camera_btn" aria-hidden="true"></span>
@@ -27,13 +27,12 @@
                     </canvas>
                 </div>
 
+                <div id="user" class="col-sm-6">
+                    <img class="col-sm-2 profile_thumbnail" src="{{basePhotoUrl}}{{user.pics[user.pics.length-1].filename}}">
 
-                <div id="user" class="col-lg-5">
-                    <img class="col-sm-2" id="profile_photo" src="{{basePhotoUrl}}{{user.pics[user.pics.length-1].filename}}">
+                    <h2 class="col-sm-3">{{user.username}}</h2>
 
-                    <h2 class="col-sm-4">{{user.username}}</h2>
-
-                    <div id="user_info" class="col-sm-4 pull-right">
+                    <div id="user_info" class="col-sm-4 pull-right text-right">
                         <p>{{user.pics.length}} Photos</p>
                         <button ng-click="follow()" ng-show="isLoggedIn && !isCurrentProfile && !isFollowing" class="btn btn-success btn_follow">Follow</button>
                         <button ng-click="unfollow()" ng-show="isLoggedIn && !isCurrentProfile && isFollowing" class="btn btn-default btn_follow">Unfollow</button>

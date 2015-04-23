@@ -1,10 +1,11 @@
 TODO:
 
 NEXT STEP:
-position the camera in a better place and chop off the sides
-	make it resizable (with the window)
-	hide/show camera work
+position the camera in a better place and chop off the sides XXX
+	make it resizable (with the window) XXX
+	hide/show camera work XXX
 make show more comments work
+default profile picture and stuff
 have people's profiles reflect their comments and likes
 search
 hashtags

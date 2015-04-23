@@ -25,12 +25,17 @@ a {
     background-image: url("//instagramstatic-a.akamaihd.net/bluebar/9ba8070/images/shared/noise-2.png"),-webkit-linear-gradient(top,#59bb92,#31b47d);
 }
 
+.form-control:focus {
+    border-color: #31b47d;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(49, 180, 125, 1);
+}
+
 /************************************************************************
 **************************     FEED
 ************************************************************************/
 
 .feed_item {
-    max-width: 690px;
+    max-width: 650px;
     padding: 25px;
     /*background-color:pink;*/
     background: #e0e1e2 url("//instagramstatic-a.akamaihd.net/bluebar/9ba8070/images/shared/noise-2.png");
@@ -118,9 +123,15 @@ a {
 **************************     PROFILE
 ************************************************************************/
 
-#profile_photo {
+.profile_thumbnail {
     width:110px;
+    background: #fafafa;
+    border: 1px solid silver;
+    border-radius: 3px;
+    box-shadow: 0 1px 16px rgba(0,0,0,.1);
+    padding:0;
 }
+
 
 #facelapse_container {
     padding:0;
