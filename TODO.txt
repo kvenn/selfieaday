@@ -1,5 +1,14 @@
 TODO:
 
+NEXT STEP:
+position the camera in a better place and chop off the sides
+	make it resizable (with the window)
+	hide/show camera work
+make show more comments work
+have people's profiles reflect their comments and likes
+search
+hashtags
+
 ----P1-----
 make the new user state (give them a stock 'egg' photo so their profile doesn't looks terrible)
 
@@ -59,3 +68,5 @@ button that toggles the overlay of the last image
 tell the browswer to cache the images indefinitely
 	https://developers.google.com/speed/docs/insights/LeverageBrowserCaching
 	- also if cache is disabled, it barely works
+
+change the speed of the facelapse
