@@ -199,17 +199,29 @@ angular.module('profile', [])
 		 // Overlap picture of video
 		 function updateLocation()
 		 {
-			 //var jVideo = jQuery('#video');
-			 var jPhoto = jQuery('#camera_photo');
-			 var jCancel = jQuery('#cancelpicture');
+			 var jVideo = $('#video');
+			 var jPhoto = $('#camera_photo');
 
 			 var offset = jPhoto.offset();
+			 var videoOffset = jVideo.offset();
 
-			 jCancel.offset({top: offset.top + 10, left: (offset.left + jPhoto.width()) - 30});
+			 // Move X Button
+			 $('#cancelpicture').offset({top: offset.top + 10, left: (offset.left + jPhoto.width()) - 30});
 
-			 video.width = (4/3) * $("#video_container").width();
-			 var widthDifference = video.width - (video.width*(3/4));
-			 $(video).css('margin-left','-'+widthDifference/2+'px');
+			 // Resize video (4/3 is the aspect ratio - this might be dynamic?)
+			 //if (video.width)
+			 //{
+				 video.width = (4 / 3) * $("#video_container").width();
+				 var widthDifference = video.width - (video.width * (3 / 4));
+				 $(video).css('margin-left', '-' + widthDifference / 2 + 'px');
+			 //}
+
+			 // Move the camera button
+			 $('#startbutton').offset(
+				{
+					 top:  videoOffset.top + jVideo.height() - 60,
+					 left: (videoOffset.left + (jVideo.width()/2) - ($('#startbutton').width()/2))
+				})
 		 }
 
 		 $(window).resize(function ()
