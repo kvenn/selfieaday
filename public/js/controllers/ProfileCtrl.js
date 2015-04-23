@@ -22,6 +22,18 @@ angular.module('profile', [])
 		 $scope.basePhotoUrl = "https://selfieaday.s3.amazonaws.com/";
 		 $scope.isLoggedIn = Auth.isLoggedIn();
 		 $scope.currentUser = Auth.currentUser();
+
+		 // TODO this will be replaced by global user
+		 $scope.$watch( Auth.currentUser, function ( currentUser ) {
+			 $scope.isLoggedIn = Auth.isLoggedIn();
+			 $scope.currentUser = currentUser;
+			 if ($scope.isLoggedIn && $scope.isCurrentProfile)
+			 {
+				 $scope.user = $scope.currentUser;
+			 }
+		 });
+
+
 		 var mediaStream;
 		 // TODO: just set the css to hide by default
 		 $("#camera").hide();

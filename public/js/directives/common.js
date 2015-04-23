@@ -46,7 +46,7 @@ angular.module('common-directives', [])
 					if (scope.images.length != 0)
 						scope.imgIndex = (scope.imgIndex + 1) % scope.images.length;
 					attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
-				}, 300);
+				}, 200);
 
 				scope.$on('$destroy', function ()
 				{
