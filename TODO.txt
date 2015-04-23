@@ -29,6 +29,9 @@ BUG: picture has like 10px of just transparency on bottom- so its not actually 6
 
 BUG: profile/myusername shows you profile as if it's not yours
 
+BUG: if their session expires on the backend (or the server goes down and back up) they don't get logged out because they still have their cookie
+	if cookie is empty then erase the old cookie and null out currentUser
+
 
 ----P2-----
 send down user object of current logged in user when you make the call to serve the pages

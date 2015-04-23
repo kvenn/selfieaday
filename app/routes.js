@@ -6,6 +6,7 @@ aws = require('aws-sdk');
 // grab the nerd model we just created
 var Pic = require('./models/pic');
 var User = require('./models/user');
+var Comment = require('./models/comment');
 //var ObjectId = require('mongoose').Types.ObjectId;
 
 module.exports = function (app, passport)
@@ -15,7 +16,8 @@ module.exports = function (app, passport)
 	 ====================================================*/
 	var userPopulateQuery = [{path: 'pics', select: 'filename hashtags'},
 							 {path: 'followers', select: 'username'},
-							 {path: 'following', select: 'username'}];
+							 {path: 'following', select: 'username'},
+							 {path: 'comments', select:'author text'}];
 
 	// Get all users
 	app.get('/api/user', function (req, res)
@@ -32,11 +34,22 @@ module.exports = function (app, passport)
 		}
 
 		// populate pics wit hteh actual pics they reference
-		User.find(query).populate(userPopulateQuery).exec(function (err, users)
+		User.find(query).populate(userPopulateQuery).exec(function (err, docs)
 		{
 			if (err)
 				res.status(400).send(err);
-			res.json(users);
+
+			//res.json(users);
+			var options = {
+				path: 'comments.author',
+				model: 'User'
+			};
+
+			if (err)
+				res.status(400).send(err);
+			User.populate(docs, options, function (err, users) {
+				res.json(users);
+			});
 		});
 	});
 
@@ -52,6 +65,7 @@ module.exports = function (app, passport)
 		})
 	});
 
+	// follow a user
 	app.post('/api/follow', function (req, res)
 	{
 		var userToFollowId = req.body.userToFollowId;
@@ -71,6 +85,7 @@ module.exports = function (app, passport)
 		})
 	});
 
+	// unfollow a user
 	app.post('/api/unfollow', function (req, res)
 	{
 		var userToUnfollowId = req.body.userToUnfollowId;
@@ -87,6 +102,45 @@ module.exports = function (app, passport)
 				res.send();
 			})
 		})
+	});
+
+	// write comment on a user
+	app.post('/api/comment', function (req, res)
+	{
+		var facelapsOwner = req.body.facelapseOwner;
+		var text = req.body.text;
+		var authorId = req.user._id;
+
+		var comment = new Comment();
+		comment.facelapseOwner = facelapsOwner;
+		comment.text = text;
+		comment.author = authorId;
+
+		comment.save(function (err, comment)
+		{
+			User.update({_id: facelapsOwner}, {$addToSet: {comments: comment._id}}).exec(function (err, numAffected)
+			{
+				if (err)
+					res.status(404).send(err);
+
+				Comment.populate(comment, 'author', function(err, comment)
+				{
+					res.send(comment);
+				});
+			});
+		});
+	});
+
+	// write comment on a user
+	app.delete('/api/comment/:id', function (req, res)
+	{
+		var commentId = req.params.id;
+		User.update({comments: commentId}, {$pull: {comments: commentId}}).exec(function (err, numAffected)
+		{
+			if (err)
+				res.status(404).send(err);
+			res.send();
+		});
 	});
 
 	/*===================================================
@@ -256,7 +310,8 @@ module.exports = function (app, passport)
 	 Front end routes
 	 ====================================================*/
 	// route to handle all angular requests
-	app.get('*', function (req, res){
+	app.get('*', function (req, res)
+	{
 		if (req.isAuthenticated())
 		{
 			User.findOne({_id: req.user._id}).populate(userPopulateQuery).exec(function (err, user)
@@ -264,13 +319,13 @@ module.exports = function (app, passport)
 				if (err)
 					res.status(400).send(err);
 
-				res.cookie('u', JSON.stringify(user), { maxAge: 900000});
+				res.cookie('u', JSON.stringify(user), {maxAge: 900000});
 				res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
 			});
 		}
 		else
 		{
-			res.cookie('u', '', { maxAge: 900000});
+			res.cookie('u', '', {maxAge: 900000});
 			res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
 		}
 	});

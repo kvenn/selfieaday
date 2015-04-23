@@ -16,7 +16,11 @@
                 (user.followers.length==1 && (currentUser?currentUser.username!=follower.username:true) ? 'likes this' : 'like this') :
                 ($index==user.followers.length-2) ? ' and ' : ', '}}
             </span>
+            <br/><a ng-show="user.comments.length > 4">{{user.comments.length-4}} more comments</a>
+            <div ng-repeat="comment in user.comments">
+                <p ng-hide="user.comments.length > 4 ? $index < (user.comments.length - 4) : false">{{comment.text}} by {{comment.author.username}}</p>
+            </div>
         </div>
-        <input enterpress user="user" class="form-control" placeholder="Write a comment..."/>
+        <input ng-show="isLoggedIn" commentinput user="user" currentUser="{{currentUser}}" class="form-control comment-input" placeholder="Write a comment..."/>
     </div>
 </div>

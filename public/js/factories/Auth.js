@@ -67,8 +67,13 @@ angular.module('auth', [])
 
 			userFromCookie: function (user)
 			{
+				if (user == '')
+				{
+					delete $cookies['u'];
+					currentUser = null;
+				}
+
 				currentUser = user;
-				return currentUser;
 			},
 
 			currentUser: function ()

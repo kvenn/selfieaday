@@ -43,34 +43,46 @@ angular.module('common-directives', [])
 
 				var interval = $interval(function ()
 				{
-					if(scope.images.length != 0)
+					if (scope.images.length != 0)
 						scope.imgIndex = (scope.imgIndex + 1) % scope.images.length;
-						attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
+					attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
 				}, 300);
 
-				scope.$on('$destroy', function() {
+				scope.$on('$destroy', function ()
+				{
 					$interval.cancel(interval);
 				});
 
 			}
 		};
 	}])
-	.directive('enterpress', function ()
+	.directive('commentinput', ['$http', function ($http)
 	{
 		return {
-			scope: {user: '=user'},
+			scope: {
+				user: '=',
+			},
 			link:  function (scope, element, attrs)
 			{
 				element.bind("keydown keypress", function (event)
 				{
 					if (event.which === 13)
 					{
-						// submit this comment for this user
-						console.log(scope.user);
+						// submit this comment for element user
+						var comment = {
+							text:           element.val(),
+							facelapseOwner: scope.user._id
+						};
+						$http.post('/api/comment', comment)
+							.success(function (data)
+							{
+								scope.user.comments.push(data)
+								element.val('');
+							});
 
 						event.preventDefault();
 					}
 				});
 			}
 		}
-	});
+	}]);
