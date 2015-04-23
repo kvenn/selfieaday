@@ -99,6 +99,13 @@ angular.module('profile', [])
 			 mediaStream.stop();
 		 };
 
+		 $scope.cancelPicture = function()
+		 {
+			 clearphoto();
+			 $scope.viewingPhoto = false;
+			 updateLocation();
+		 };
+
 		 $scope.follow = function ()
 		 {
 			 $http.post('/api/follow/', {userToFollowId: $scope.user._id})
@@ -168,6 +175,8 @@ angular.module('profile', [])
 							 var currentUser = Auth.currentUser();
 							 currentUser.pics.push(pic);
 							 Auth.updateCurrentUser(currentUser);
+							 $scope.cancelPicture();
+							 $scope.hideCamera();
 						 });
 				 },
 				 onError:         function (status)
@@ -276,9 +285,7 @@ angular.module('profile', [])
 
 			 cancelpicture.addEventListener('click', function (ev)
 			 {
-				 clearphoto();
-				 $scope.viewingPhoto = false;
-				 updateLocation();
+				 $scope.cancelPicture();
 			 }, false);
 
 			 clearphoto();
