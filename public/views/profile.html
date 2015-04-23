@@ -10,15 +10,18 @@
                 </div>
                 <!-- This is the current user -->
                 <div ng-show="photoMode" class="col-lg-7 center-block text-center">
-                    <div id="video_container">
+                    <div id="video_container" ng-hide="viewingPhoto">
                         <video id="video" width="100%">Video stream not available.</video>
+                        <span id="startbutton" class="glyphicon glyphicon-camera camera_btn" aria-hidden="true"></span>
                     </div>
-                    <img id="camera_photo" alt="">
 
-                    <span id="startbutton" class="glyphicon glyphicon-camera" aria-hidden="true"></span>
-                    <a id="uploadphoto" ng-click="uploadPhoto()">Save Photo</a>
+                    <div id="camera_photo_container" ng-show="viewingPhoto">
+                        <span id="cancelpicture" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        <img id="camera_photo" alt="">
+                        <span id="uploadphoto" ng-click="uploadPhoto()" class="glyphicon glyphicon-ok camera_btn" aria-hidden="true"></span>
+                    </div>
+
                     <p id="status">Take a photo and save it.</p>
-                    <span id="cancelpicture" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 
                     <canvas id="canvas">
                     </canvas>

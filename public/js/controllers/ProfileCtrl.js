@@ -206,30 +206,56 @@ angular.module('profile', [])
 			 var videoOffset = jVideo.offset();
 
 			 // Move X Button
-			 $('#cancelpicture').offset({top: offset.top + 10, left: (offset.left + jPhoto.width()) - 30});
+			 //$('#cancelpicture').offset({top: offset.top + 10, left: (offset.left + jPhoto.width()) - 30});
 
 			 // Resize video (4/3 is the aspect ratio - this might be dynamic?)
-			 //if (video.width)
-			 //{
-				 video.width = (4 / 3) * $("#video_container").width();
-				 var widthDifference = video.width - (video.width * (3 / 4));
-				 $(video).css('margin-left', '-' + widthDifference / 2 + 'px');
-			 //}
+			 var containerWidth;
+			 containerWidth = $("#video_container").width();
+			 if (containerWidth == 0)
+			 	containerWidth = $("#camera_photo_container").width();
+			 
+			 video.width = (4 / 3) * containerWidth;
+			 var widthDifference = video.width - (video.width * (3 / 4));
+			 $(video).css('margin-left', '-' + widthDifference / 2 + 'px');
 
 			 // Move the camera button
-			 $('#startbutton').offset(
-				{
-					 top:  videoOffset.top + jVideo.height() - 60,
-					 left: (videoOffset.left + (jVideo.width()/2) - ($('#startbutton').width()/2))
-				})
+			 //var takePicBtn = $('#startbutton');
+			 //takePicBtn.offset(
+				//{
+				//	 top:  videoOffset.top + jVideo.height() - takePicBtn.height() - 10,
+				//	 left: videoOffset.left + (jVideo.width()/2) - (takePicBtn.width()/2)
+				//});
+
+			 //var uploadBtn = $('#uploadphoto');
+			 //uploadBtn.offset(
+				// {
+				//	 top:  offset.top + jPhoto.height() - uploadBtn.height() - 10,
+				//	 left: (offset.left + (jPhoto.width()/2) - (uploadBtn.width()/2))
+				// })
 		 }
+
+		 //$('#camera_photo').resize(function ()
+		 //{
+			// updateLocation();
+		 //});
+		 //
+		 //$('#video').resize(function ()
+		 //{
+			// updateLocation();
+		 //});
 
 		 $(window).resize(function ()
 		 {
 			 updateLocation();
 		 });
 
+		 $(video).change(function()
+		 {
+			 updateLocation();
+		 });
+
 		 $scope.photoMode = false;
+		 $scope.viewingPhoto = false;
 
 		 function startup()
 		 {
@@ -239,10 +265,6 @@ angular.module('profile', [])
 			 startbutton = document.getElementById('startbutton');
 			 cancelpicture = document.getElementById('cancelpicture');
 			 uploadphoto = document.getElementById('uploadphoto');
-
-			 $(cancelpicture).hide();
-			 $(photo).hide();
-			 $(uploadphoto).hide();
 
 			 navigator.getMedia = (navigator.getUserMedia ||
 								   navigator.webkitGetUserMedia ||
@@ -286,19 +308,16 @@ angular.module('profile', [])
 			 startbutton.addEventListener('click', function (ev)
 			 {
 				 takepicture();
-				 ev.preventDefault();
+				 $scope.viewingPhoto = true;
 				 updateLocation();
+				 ev.preventDefault();
 			 }, false);
 
 			 cancelpicture.addEventListener('click', function (ev)
 			 {
-				 $(cancelpicture).hide();
-				 $(photo).hide();
-				 $(uploadphoto).hide();
-
-				 $(startbutton).show();
-				 $(video).show();
 				 clearphoto();
+				 $scope.viewingPhoto = false;
+				 updateLocation();
 			 }, false);
 
 			 clearphoto();
@@ -331,12 +350,6 @@ angular.module('profile', [])
 			 photo.setAttribute('src', data);
 
 			 updateLocation();
-			 $(startbutton).hide();
-			 $(video).hide();
-
-			 $(cancelpicture).show();
-			 $(photo).show();
-			 $(uploadphoto).show();
 		 }
 
 
