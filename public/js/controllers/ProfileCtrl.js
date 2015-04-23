@@ -28,7 +28,7 @@ angular.module('profile', [])
 
 		 var username = $routeParams.username;
 		 // Viewing a user
-		 if (username && username != $scope.currentUser.username)
+		 if (username && ($scope.currentUser ? username != $scope.currentUser.username : true))
 		 {
 			 $http.get('/api/user/' + username)
 				 .success(function (data)
@@ -95,8 +95,8 @@ angular.module('profile', [])
 				 .success(function (data)
 				 {
 					 var currentUser = Auth.currentUser();
-					 currentUser.following.push($scope.user);
-					 $scope.user.followers.push(currentUser);
+					 currentUser.following.push(toSimpleUser($scope.user));
+					 $scope.user.followers.push(toSimpleUser(currentUser));
 
 					 Auth.updateCurrentUser(currentUser);
 					 $scope.isFollowing = true;
@@ -399,6 +399,15 @@ angular.module('profile', [])
 				 return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
 			 });
 			 return uuid;
+		 }
+
+		 // Remove the other fields that could cause circular references (followers/following)
+		 function toSimpleUser(user)
+		 {
+			 return {
+				 _id : user._id,
+				 username : user.username
+			 }
 		 }
 	 }]);
 

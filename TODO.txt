@@ -22,6 +22,7 @@ export as gif?
 
 BUG: pictures don't start cycling on login - have to click on profile and then back to feed?
 	or soemtiems it just stops entirely, but closing the tab and going back in fixes it
+	i think this is a result of them not being cached
 
 BUG: picture has like 10px of just transparency on bottom- so its not actually 640x640
 	well it is but it has that fucked up transparency
@@ -54,3 +55,4 @@ button that toggles the overlay of the last image
 
 tell the browswer to cache the images indefinitely
 	https://developers.google.com/speed/docs/insights/LeverageBrowserCaching
+	- also if cache is disabled, it barely works

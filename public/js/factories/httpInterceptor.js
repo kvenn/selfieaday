@@ -13,7 +13,7 @@ angular.module('httpFactory', [])
 				if (!!$cookies['u'])
 				{
 					var user = JSON.parse($cookies['u']);
-					$injector.get('Auth').updateCurrentUser(user);
+					$injector.get('Auth').userFromCookie(user);
 				}
 				if (typeof response.data === 'object')
 				{

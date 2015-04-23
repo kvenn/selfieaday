@@ -61,6 +61,13 @@ angular.module('auth', [])
 			updateCurrentUser: function (user)
 			{
 				currentUser = user;
+				$cookies['u'] = JSON.stringify(user);
+				return currentUser;
+			},
+
+			userFromCookie: function (user)
+			{
+				currentUser = user;
 				return currentUser;
 			},
 
