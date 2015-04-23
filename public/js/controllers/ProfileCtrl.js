@@ -185,12 +185,10 @@ angular.module('profile', [])
 
 		 // |streaming| indicates whether or not we're currently streaming
 		 // video from the camera. Obviously, we start at false.
-
 		 var streaming = false;
 
 		 // The various HTML elements we need to configure or control. These
 		 // will be set by the startup() function.
-
 		 var video = null;
 		 var canvas = null;
 		 var photo = null;
@@ -207,20 +205,10 @@ angular.module('profile', [])
 
 			 var offset = jPhoto.offset();
 
-			 //jPhoto.offset({top: offset.top, left: offset.left});
-
 			 jCancel.offset({top: offset.top + 10, left: (offset.left + jPhoto.width()) - 30});
 
-			 //var oldWidth = video.width;
 			 video.width = (4/3) * $("#video_container").width();
-			 //var widthDifference = video.width - oldWidth;
-			 //$(video).offset({left:-(widthDifference/2)})
-
 			 var widthDifference = video.width - (video.width*(3/4));
-			 console.log(video.width);
-			 console.log(widthDifference);
-			 console.log($(video).offset());
-			 //$(video).offset({left:(widthDifference/2)});
 			 $(video).css('margin-left','-'+widthDifference/2+'px');
 		 }
 
@@ -324,26 +312,11 @@ angular.module('profile', [])
 			 var squareDim = 640;
 			 canvas.width = squareDim;
 			 canvas.height = squareDim;
-			 //var widthDifference = width - height;
-			 var widthDifference = $(video).width() - $(video).height();
 
-			 //context.drawImage(video, 80, 0, $(video).height()-(widthDifference/2)-30, $(video).height()-(widthDifference/2)-30, 0, 0, squareDim, squareDim);
-			 //context.drawImage(video, 80, 0, $(video).height()+23, $(video).height()+23, 0, 0, squareDim, squareDim); // windo 560px
 			 context.drawImage(video, 80, 0, 480, 480, 0, 0, squareDim, squareDim);
-
-			 //context.drawImage(video, 0, 0, $(video).height()-(widthDifference/2), $(video).height()-(widthDifference/2), 0, 0, squareDim, squareDim);
-			 // ^^^ that is actually kind of close
-
-
-			 //context.drawImage(video, widthDifference/2, 0, $(video).width() - widthDifference, $(video).height(), 0, 0, squareDim, squareDim);
-			 //context.drawImage(video, widthDifference/2, 0, width - widthDifference, height, 0, 0, squareDim, squareDim);
-
 
 			 var data = canvas.toDataURL('image/png');
 			 photo.setAttribute('src', data);
-			 // shrink the image to be the same size as the video so it looks normal (but also account for the square cropping)
-			 //photo.setAttribute('width', squareDim);
-			 //photo.setAttribute('height', squareDim);
 
 			 updateLocation();
 			 $(startbutton).hide();
