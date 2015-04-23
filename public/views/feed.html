@@ -9,10 +9,11 @@
 
         <div ng-repeat="follower in user.followers | limitTo: 4">
             <a href="/profile/{{follower.username}}">
-                {{follower.username}}
+                {{currentUser && follower.username == currentUser.username ? 'you' : follower.username}}
             </a>
             <span>
-                {{$last ? (user.followers.length==1 ? 'likes this' : 'like this') :
+                {{$last ?
+                (user.followers.length==1 && (currentUser?currentUser.username!=follower.username:true) ? 'likes this' : 'like this') :
                 ($index==user.followers.length-2) ? ' and ' : ', '}}
             </span>
         </div>

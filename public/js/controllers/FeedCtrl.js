@@ -3,14 +3,28 @@
 angular.module('feed', [])
 	.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider)
 	{
+		$routeProvider
+			.when('/', {
+				templateUrl:  '/views/feed.html',
+				controller:   'FeedController',
+				controllerAs: 'feed'
+			});
+
 		$locationProvider.html5Mode(true);
 	}])
 	.controller('FeedController',
-	['$http', '$scope', '$routeParams', '$timeout',
-	 function ($http, $scope, $routeParams, $timeout)
+	['$http', '$scope', '$routeParams', 'Auth',
+	 function ($http, $scope, $routeParams, Auth)
 	 {
+		 // TODO Make current user and isloggedin just root scope?
+		 $scope.currentUser = Auth.currentUser();
 
-		 $scope.getUsers = function()
+		 $scope.$watch( Auth.currentUser, function ( currentUser ) {
+			 $scope.isLoggedIn = Auth.isLoggedIn();
+			 $scope.currentUser = currentUser;
+		 });
+
+		 $scope.getUsers = function ()
 		 {
 			 $http.get('/api/user')
 				 .success(function (data)
@@ -27,14 +41,15 @@ angular.module('feed', [])
 			 {
 				 // Get the focused element:
 				 var focused = $(':focus');
-				 if(focused.is('input'))
+				 if (focused.is('input'))
 				 {
 
 				 }
 			 }
 		 });
 
-		 $scope.submitComment = function(userId) {
+		 $scope.submitComment = function (userId)
+		 {
 			 console.log('hit')
 		 }
 
