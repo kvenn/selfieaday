@@ -259,6 +259,7 @@ angular.module('profile', [])
 						 video.src = vendorURL.createObjectURL(stream);
 					 }
 					 video.play();
+					 updateLocation();
 				 },
 				 function (err)
 				 {
