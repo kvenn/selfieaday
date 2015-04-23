@@ -205,7 +205,6 @@ angular.module('profile', [])
 		 var cancelpicture = null;
 		 var uploadphoto = null;
 
-		 // Overlap picture of video
 		 function updateLocation()
 		 {
 			 // Resize video (4/3 is the aspect ratio - this might be dynamic?)

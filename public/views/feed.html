@@ -2,25 +2,51 @@
 
 <div id="feed_container">
     <div class="feed_item center-block" ng-repeat="user in users">
-        <div class="photo_container center-block">
-            <img class="slideshow center-block" slideshow images="user.pics">
-        </div>
-        <a href="/profile/{{user.username}}">{{user.username}}</a> <span> {{user.pics.length}} Photos</span><br/>
+        <div class="feed_card">
 
-        <div ng-repeat="follower in user.followers | limitTo: 4">
-            <a href="/profile/{{follower.username}}">
-                {{currentUser && follower.username == currentUser.username ? 'you' : follower.username}}
-            </a>
-            <span>
-                {{$last ?
-                (user.followers.length==1 && (currentUser?currentUser.username!=follower.username:true) ? 'likes this' : 'like this') :
-                ($index==user.followers.length-2) ? ' and ' : ', '}}
-            </span>
-            <br/><a ng-show="user.comments.length > 4">{{user.comments.length-4}} more comments</a>
-            <div ng-repeat="comment in user.comments">
-                <p ng-hide="user.comments.length > 4 ? $index < (user.comments.length - 4) : false">{{comment.text}} by {{comment.author.username}}</p>
+            <div class="photo_container center-block">
+                <img class="slideshow center-block" slideshow images="user.pics">
             </div>
+
+            <div class="facelapse_details row">
+
+                <!-- Left Side (Follow Button) -->
+                <span ng-class="{followed: isFollowing(user)}" class="like_btn glyphicon glyphicon-heart inline" aria-hidden="true"></span>
+
+                <!-- Left/Middle Side (Like/Followers)-->
+                <div class="followers inline">
+                    <div ng-repeat="follower in user.followers | limitTo: 4">
+                        <a href="/profile/{{follower.username}}">
+                            {{currentUser && follower.username == currentUser.username ? 'you' : follower.username}}
+                        </a>
+                        <span>
+                            {{$last ?
+                            (user.followers.length==1 && (currentUser?currentUser.username!=follower.username:true) ? 'likes this' : 'like this') :
+                            ($index==user.followers.length-2) ? ' and ' : ', '}}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Right Side (Facelapse Owner)-->
+                <div class="facelapse_owner inline pull-right">
+                    <a href="/profile/{{user.username}}">{{user.username}}</a> <span> {{user.pics.length}} Photos</span>
+                </div>
+            </div>
+
+            <a class="more_comments" ng-show="user.comments.length > 4">{{user.comments.length-4}} more comments</a>
+
+            <div class="comment_section">
+                <div ng-repeat="comment in user.comments">
+                    <p class="comment" ng-hide="user.comments.length > 4 ? $index < (user.comments.length - 4) : false">
+                        <a href="profile/{{comment.author.username}}">{{comment.author.username}}</a> {{comment.text}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="comment_input_container">
+                <input ng-show="isLoggedIn" commentinput user="user" currentUser="{{currentUser}}" class="form-control comment-input" placeholder="Write a comment..."/>
+            </div>
+
         </div>
-        <input ng-show="isLoggedIn" commentinput user="user" currentUser="{{currentUser}}" class="form-control comment-input" placeholder="Write a comment..."/>
     </div>
 </div>

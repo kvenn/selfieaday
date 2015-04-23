@@ -34,18 +34,21 @@ angular.module('feed', [])
 		 };
 		 $scope.getUsers();
 
-		 // Check if enter was pressed
-		 //$(document).keypress(function (e)
-		 //{
-			// if (e.which == 13)
-			// {
-			//	 // Get the focused element:
-			//	 var focused = $(':focus');
-			//	 if (focused.is('input') && focused.hasClass('comment-input'))
-			//	 {
-			//		 console.log(focused.scope().node)
-			//	 }
-			// }
-		 //});
+		 $scope.isFollowing = function(user)
+		 {
+			 return $scope.currentUser && userIndexOf(user.followers, $scope.currentUser) != -1;
+		 };
 
+		 // TODO pull out to global functions
+		 function userIndexOf(arr, user)
+		 {
+			 for (var i = 0; i < arr.length; i++)
+			 {
+				 if (arr[i]._id == user._id)
+				 {
+					 return i;
+				 }
+			 }
+			 return -1;
+		 }
 	 }]);
