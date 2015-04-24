@@ -1,3 +1,3 @@
 module.exports = {
-	url: 'mongodb://localhost/selfieaday'
+	url: process.env.OPENSHIFT_MONGODB_DB_URL
 };

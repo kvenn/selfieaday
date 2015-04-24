@@ -16,14 +16,14 @@ var mongoose = require('mongoose');
 var db = require('./config/db');
 
 // connect to our mongoDB database
-if(typeof ipaddress === "undefined")
-{
+//if(typeof ipaddress === "undefined")
+//{
 	mongoose.connect(db.url);
-}
-else
-{
-	mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
-}
+//}
+//else
+//{
+//	mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
+//}
 
 app.use(expressSession({secret: 'mySecretKey'}));
 app.use(passport.initialize());
