@@ -51,7 +51,7 @@ angular.module('common-directives', [])
 						attrs.$set('src', fullPathUrl + 'blank');
 					}
 
-				}, 200);
+				}, 300);
 
 				scope.$on('$destroy', function ()
 				{
@@ -65,7 +65,7 @@ angular.module('common-directives', [])
 	{
 		return {
 			scope: {
-				user: '=',
+				user: '='
 			},
 			link:  function (scope, element, attrs)
 			{

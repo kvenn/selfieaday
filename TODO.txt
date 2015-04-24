@@ -1,15 +1,19 @@
 TODO:
 
+selfiestream
+
 NEXT STEP:
 position the camera in a better place and chop off the sides XXX
 	make it resizable (with the window) XXX
 	hide/show camera work XXX
+default profile picture and stuff XXX
+
 make show more comments work
 fix need to refresh after log in
-default profile picture and stuff
 have people's profiles reflect their comments and likes
 search
 hashtags
+hide checkbox when uploading
 settings
 
 ----P1-----
