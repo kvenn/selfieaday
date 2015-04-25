@@ -93,8 +93,9 @@ a {
     line-height: 13px;
 }
 
+/* color of the button when they're being followed */
 .followed {
-    color: #D72513;
+    color: #31b47d;
 }
 
 .followers {
