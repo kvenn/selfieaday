@@ -92,7 +92,7 @@
 		};
 
 		S3Upload.prototype.uploadToS3 = function(file, url, public_url) {
-			/*var this_s3upload, xhr;
+			var this_s3upload, xhr;
 			this_s3upload = this;
 			xhr = this.createCORSRequest('PUT', url);
 			if (!xhr) {
@@ -120,23 +120,7 @@
 			xhr.setRequestHeader('Content-Type', file.type);
 			xhr.setRequestHeader('x-amz-acl', 'public-read');
 			//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-			return xhr.send(file);*/
-
-			$.ajax({
-				type: 'PUT',
-				url: url,
-				async: false,
-				data: file,
-				beforeSend: function(xhr){xhr.setRequestHeader('X-Test-Header', 'test-value');xhr.setRequestHeader('Content-Type', file.type);},
-				dataType: 'jsonp',
-				success: function(json) {
-					console.dir(json);
-					this_s3upload.onFinishS3Put(public_url);
-				},
-				error: function(e) {
-					console.log(e.message);
-				}
-			});
+			return xhr.send(file);
 		};
 
 		S3Upload.prototype.uploadFile = function(file) {
