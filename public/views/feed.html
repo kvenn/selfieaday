@@ -33,7 +33,7 @@
                 </div>
             </div>
 
-            <a class="more_comments" ng-show="user.comments.length > 4">{{user.comments.length-4}} more comments</a>
+            <a class="more_comments" ng-click="showComments(user)" ng-show="user.comments.length > 4">{{user.comments.length-4}} more comments</a>
 
             <div class="comment_section">
                 <div ng-repeat="comment in user.comments">
@@ -47,6 +47,23 @@
                 <input ng-show="isLoggedIn" commentinput user="user" currentUser="{{currentUser}}" class="form-control comment-input" placeholder="Write a comment..."/>
             </div>
 
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{commentsModalUser.username}} comments</h4>
+                </div>
+                <div class="modal-body">
+                    <div ng-repeat="comment in commentsModalUser.comments">
+                        <a href="profile/{{comment.author.username}}">{{comment.author.username}}</a> {{comment.text}}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
