@@ -11,9 +11,9 @@ var expressSession = require('express-session');
 var mongoose = require('mongoose');
 
 /** configuration =========================================== */
-
+var os = require('os');
 // connect to our mongoDB database
-if(typeof ipaddress === "undefined")
+if(os.hostname().indexOf("local") > -1)
 {
 	var db_local = require('./config/db_local')
 	mongoose.connect(db_local.url);
