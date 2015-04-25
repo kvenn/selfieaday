@@ -118,7 +118,7 @@
 			}
 			xhr.setRequestHeader('Content-Type', file.type);
 			xhr.setRequestHeader('x-amz-acl', 'public-read');
-			xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+			//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
 			return xhr.send(file);
 		};
 

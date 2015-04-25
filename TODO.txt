@@ -15,6 +15,7 @@ search
 hashtags
 hide checkbox when uploading
 settings
+host blank.png on the server
 
 ----P1-----
 make the new user state (give them a stock 'egg' photo so their profile doesn't looks terrible)

@@ -9,6 +9,7 @@ var methodOverride = require('method-override');
 var passport = require('passport');
 var expressSession = require('express-session');
 var mongoose = require('mongoose');
+var cors = require('cors')
 
 /** configuration =========================================== */
 
@@ -44,6 +45,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('X-HTTP-Method-Override'));
 // for parsing multipart/form-data
 app.use(multer());
+app.use(cors())
 
 // set the static files location /public/img will be /img for users
 app.use(express.static(__dirname + '/public'));
