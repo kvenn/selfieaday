@@ -117,7 +117,6 @@
 					}
 				};
 			}
-			xhr.setRequestHeader('Origin', document.domain);
 			xhr.setRequestHeader('Content-Type', file.type);
 			xhr.setRequestHeader('x-amz-acl', 'public-read');
 			//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
