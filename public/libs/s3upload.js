@@ -56,14 +56,14 @@
 		S3Upload.prototype.createCORSRequest = function(method, url) {
 			var xhr;
 			xhr = new XMLHttpRequest();
-			//if (xhr.withCredentials != null) {
-			//	xhr.open(method, url, true);
-			//} else if (typeof XDomainRequest !== "undefined") {
+			if (xhr.withCredentials != null) {
+				xhr.open(method, url, true);
+			} else if (typeof XDomainRequest !== "undefined") {
 				xhr = new XDomainRequest();
 				xhr.open(method, url);
-			//} else {
-			//	xhr = null;
-			//}
+			} else {
+				xhr = null;
+			}
 			return xhr;
 		};
 
@@ -117,7 +117,7 @@
 				};
 			}
 			xhr.setRequestHeader('Content-Type', file.type);
-			xhr.setRequestHeader('x-amz-acl', 'public-read');
+			xhr.setRequestHeader('acl', 'private');
 			return xhr.send(file);
 		};
 
