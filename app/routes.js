@@ -151,6 +151,7 @@ module.exports = function (app, passport)
 	{
 		//aws.config.update({accessKeyId: AWS_ACCESS_KEY, secretAccessKey: AWS_SECRET_KEY});
 		console.log(process.env.AWS_ACCESS_KEY + " " + process.env.AWS_SECRET_KEY + " " + process.env.S3_BUCKET + " " + req.query.s3_object_name);
+		console.log(process.env.S3_BUCKET);
 		aws.config.update({
 			accessKeyId: process.env.AWS_ACCESS_KEY,
 			secretAccessKey: process.env.AWS_SECRET_KEY});
