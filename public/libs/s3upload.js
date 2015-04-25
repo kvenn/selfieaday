@@ -57,6 +57,7 @@
 			var xhr;
 			xhr = new XMLHttpRequest();
 			if (xhr.withCredentials != null) {
+				xhr.withCredentials = true;
 				xhr.open(method, url, true);
 			} else if (typeof XDomainRequest !== "undefined") {
 				xhr = new XDomainRequest();
