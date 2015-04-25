@@ -117,7 +117,7 @@
 				};
 			}
 			xhr.setRequestHeader('Content-Type', file.type);
-			xhr.setRequestHeader('acl', 'private');
+			xhr.setRequestHeader('x-amz-acl', 'public-read');
 			return xhr.send(file);
 		};
 
