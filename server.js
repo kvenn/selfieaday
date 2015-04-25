@@ -52,7 +52,7 @@ app.use(express.static(__dirname + '/public'));
 
 //  Set the environment variables we need.
 ipaddress = process.env.OPENSHIFT_NODEJS_IP;
-port = process.env.OPENSHIFT_NODEJS_PORT || 8080;
+port = 8124;//process.env.OPENSHIFT_NODEJS_PORT || 8080;
 
 if (typeof ipaddress === "undefined")
 {
