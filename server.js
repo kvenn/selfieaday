@@ -9,22 +9,20 @@ var methodOverride = require('method-override');
 var passport = require('passport');
 var expressSession = require('express-session');
 var mongoose = require('mongoose');
-//var cors = require('cors');
 
 /** configuration =========================================== */
 
-// config files
-var db = require('./config/db');
-
 // connect to our mongoDB database
-//if(typeof ipaddress === "undefined")
-//{
+if(typeof ipaddress === "undefined")
+{
+	var db_local = require('./config/db_local')
+	mongoose.connect(db_local.url);
+}
+else
+{
+	var db = require('./config/db');
 	mongoose.connect(db.url);
-//}
-//else
-//{
-//	mongoose.connect(process.env.OPENSHIFT_MONGODB_DB_URL);
-//}
+}
 
 app.use(expressSession({secret: 'mySecretKey'}));
 app.use(passport.initialize());
@@ -45,7 +43,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride('X-HTTP-Method-Override'));
 // for parsing multipart/form-data
 app.use(multer());
-//app.use(cors());
 
 // set the static files location /public/img will be /img for users
 app.use(express.static(__dirname + '/public'));

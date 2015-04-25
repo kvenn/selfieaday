@@ -57,7 +57,6 @@
 			var xhr;
 			xhr = new XMLHttpRequest();
 			if (xhr.withCredentials != null) {
-				//xhr.withCredentials = true;
 				xhr.open(method, url, true);
 			} else if (typeof XDomainRequest !== "undefined") {
 				xhr = new XDomainRequest();
@@ -119,7 +118,6 @@
 			}
 			xhr.setRequestHeader('Content-Type', file.type);
 			xhr.setRequestHeader('x-amz-acl', 'public-read');
-			//xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
 			return xhr.send(file);
 		};
 
