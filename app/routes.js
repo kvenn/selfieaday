@@ -157,7 +157,7 @@ module.exports = function (app, passport)
 			Key:         req.query.s3_object_name,
 			Expires:     60,
 			ContentType: req.query.s3_object_type,
-			ACL:         'public-read'
+			ACL:         'authenticated-read'
 		};
 		s3.getSignedUrl('putObject', s3_params, function (err, data)
 		{
