@@ -150,14 +150,17 @@ module.exports = function (app, passport)
 	app.get('/sign_s3', function (req, res)
 	{
 		//aws.config.update({accessKeyId: AWS_ACCESS_KEY, secretAccessKey: AWS_SECRET_KEY});
-		aws.config.update({accessKeyId: process.env.AWS_ACCESS_KEY, secretAccessKey: process.env.AWS_SECRET_KEY});
+		aws.config.update({
+			accessKeyId: process.env.AWS_ACCESS_KEY,
+			secretAccessKey: process.env.AWS_SECRET_KEY,
+			region: "us-east-1"});
 		var s3 = new aws.S3();
 		var s3_params = {
 			Bucket:      process.env.S3_BUCKET,
 			Key:         req.query.s3_object_name,
 			Expires:     60,
 			ContentType: req.query.s3_object_type,
-			ACL:         'authenticated-read'
+			ACL:         'public-read'
 		};
 		s3.getSignedUrl('putObject', s3_params, function (err, data)
 		{
