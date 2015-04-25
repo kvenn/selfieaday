@@ -164,6 +164,7 @@ module.exports = function (app, passport)
 		};
 		s3.getSignedUrl('putObject', s3_params, function (err, data)
 		{
+			console.log(data);
 			if (err)
 			{
 				console.log(err);
