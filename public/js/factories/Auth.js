@@ -15,6 +15,7 @@ angular.module('auth', [])
 					.success(function (data)
 					{
 						currentUser = data.user;
+						Helpers.setCookie(data.user);
 						// Redirect to feed after login
 						$location.path('/')
 					});

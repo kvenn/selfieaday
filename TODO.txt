@@ -3,19 +3,22 @@ TODO:
 selfiestream
 
 NEXT STEP:
+have people's profiles reflect their comments and likes
+search
+hashtags
+hide checkmark when uploading (or disable it)
+	disable login button when logging in
+settings
+host blank.png on the server (instead of s3 so it's local)
+
+DONE:
 position the camera in a better place and chop off the sides XXX
 	make it resizable (with the window) XXX
 	hide/show camera work XXX
 default profile picture and stuff XXX
-
-make show more comments work
-fix need to refresh after log in
-have people's profiles reflect their comments and likes
-search
-hashtags
-hide checkbox when uploading
-settings
-host blank.png on the server
+make show more comments work XXX
+change to thumbs up XXX
+fix need to refresh after log in XXX
 
 ----P1-----
 make the new user state (give them a stock 'egg' photo so their profile doesn't looks terrible)
