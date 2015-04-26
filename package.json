@@ -28,6 +28,7 @@
     "aws-sdk": "~2.1.x",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "~1.12.x",
+    "ejs": "^2.3.1",
     "express": "~4.12.x",
     "express-session": "~1.11.x",
     "method-override": "~2.3.x",

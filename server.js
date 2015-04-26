@@ -28,6 +28,8 @@ app.use(expressSession({secret: 'mySecretKey'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.set('view engine', 'ejs');
+
 // Initialize Passport
 var initPassport = require('./app/passport/init');
 initPassport(passport);

@@ -41,7 +41,7 @@ angular.module('common-directives', [])
 
 				var interval = $interval(function ()
 				{
-					if (scope.images.length != 0)
+					if (scope.images && scope.images.length != 0)
 					{
 						scope.imgIndex = (scope.imgIndex + 1) % scope.images.length;
 						attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);

@@ -312,6 +312,7 @@ module.exports = function (app, passport)
 	 ====================================================*/
 	// route to handle all angular requests
 	app.get('*', function (req, res)
+	//app.use(function(req, res, next){
 	{
 		if (req.isAuthenticated())
 		{
@@ -320,14 +321,17 @@ module.exports = function (app, passport)
 				if (err)
 					res.status(400).send(err);
 
-				res.cookie('u', JSON.stringify(user), {maxAge: 900000});
-				res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
+				//res.cookie('u', JSON.stringify(user), {maxAge: 900000});
+				//res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
+				res.render('index', { globalUser: user })
 			});
 		}
 		else
 		{
-			res.cookie('u', '', {maxAge: 900000});
-			res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
+			//res.cookie('u', '', {maxAge: 900000});
+			//res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
+			console.log("not logged in");
+			res.render('index', { globalUser: "" })
 		}
 	});
 };

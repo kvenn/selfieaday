@@ -1,5 +1,5 @@
 angular.module('auth', [])
-	.factory('Auth', ['$q', '$location', '$http', '$cookies', function ($q, $location, $http, $cookies)
+	.factory('Auth', ['$q', '$location', '$http', '$cookies', 'Helpers', function ($q, $location, $http, $cookies, Helpers)
 	{
 		var currentUser;
 
@@ -14,7 +14,6 @@ angular.module('auth', [])
 					})
 					.success(function (data)
 					{
-						console.log(data);
 						currentUser = data.user;
 						// Redirect to feed after login
 						$location.path('/')
@@ -30,9 +29,8 @@ angular.module('auth', [])
 					})
 					.success(function (data)
 					{
-						console.log(data);
 						currentUser = data.user;
-						$cookies['u'] = JSON.stringify(data.user);
+						Helpers.setCookie(data.user);
 						// Redirect to feed after login
 						$location.path('/');
 					});
@@ -44,7 +42,6 @@ angular.module('auth', [])
 					.post('/logout')
 					.success(function (data)
 					{
-						console.log(data);
 						currentUser = null;
 						delete $cookies['u'];
 						// Redirect to feed after logout
@@ -61,19 +58,16 @@ angular.module('auth', [])
 			updateCurrentUser: function (user)
 			{
 				currentUser = user;
-				$cookies['u'] = JSON.stringify(user);
+				Helpers.setCookie(user);
 				return currentUser;
 			},
 
-			userFromCookie: function (user)
+			setCookie: function (user)
 			{
-				//if (user == '')
-				//{
-				//	delete $cookies['u'];
-				//	currentUser = null;
-				//}
-
-				currentUser = user;
+				var copiedUser = jQuery.extend({},user);
+				delete copiedUser['pics'];
+				delete copiedUser['comments'];
+				$cookies['u'] = JSON.stringify(copiedUser);
 			},
 
 			currentUser: function ()

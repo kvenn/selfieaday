@@ -10,11 +10,6 @@ angular.module('httpFactory', [])
 		return {
 			response:      function (response)
 			{
-				if (!!$cookies['u'])
-				{
-					var user = JSON.parse($cookies['u']);
-					$injector.get('Auth').userFromCookie(user);
-				}
 				if (typeof response.data === 'object')
 				{
 					if (response.data.redirect)

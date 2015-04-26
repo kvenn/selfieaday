@@ -1,0 +1,43 @@
+{
+  "name": "angular-preloaded",
+  "version": "0.1.0",
+  "authors": [
+    "Gabriel Scholz <info@garbl.es>"
+  ],
+  "description": "Preload data for your non-SPA AngularJS application",
+  "main": "./build/angular-preloaded.js",
+  "keywords": [
+    "angular",
+    "preload",
+    "preloaded"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/garbles/angular-preloaded",
+  "ignore": [
+    "src",
+    "node_modules",
+    "bower_components",
+    "test",
+    "karma.conf.js",
+    "package.json",
+    "README.md",
+    ".gitignore",
+    ".jshintrc"
+  ],
+  "dependencies": {
+    "angular": ">= 1.0.0"
+  },
+  "devDependencies": {
+    "angular-mocks": ">= 1.0.0"
+  },
+  "_release": "0.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.0",
+    "commit": "29368e62f23f8083bb2fad2a6ef21d3097829c48"
+  },
+  "_source": "git://github.com/garbles/angular-preloaded.git",
+  "_target": "~0.1.0",
+  "_originalSource": "angular-preloaded",
+  "_direct": true
+}
