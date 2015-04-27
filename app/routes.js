@@ -17,7 +17,7 @@ module.exports = function (app, passport)
 	var userPopulateQuery = [{path: 'pics', select: 'filename hashtags'},
 							 {path: 'followers', select: 'username'},
 							 {path: 'following', select: 'username'},
-							 {path: 'comments', select:'author text'}];
+							 {path: 'comments', select: 'author text'}];
 
 	// Get all users
 	app.get('/api/user', function (req, res)
@@ -25,7 +25,7 @@ module.exports = function (app, passport)
 		var query;
 		if (req.user)
 		{
-			// Exclue the signed in user
+			// Exclude the signed in user
 			query = {isPrivate: false, username: {'$ne': req.user.username}}
 		}
 		else
@@ -41,13 +41,14 @@ module.exports = function (app, passport)
 
 			//res.json(users);
 			var options = {
-				path: 'comments.author',
+				path:  'comments.author',
 				model: 'User'
 			};
 
 			if (err)
 				res.status(400).send(err);
-			User.populate(docs, options, function (err, users) {
+			User.populate(docs, options, function (err, users)
+			{
 				res.json(users);
 			});
 		});
@@ -63,6 +64,17 @@ module.exports = function (app, passport)
 				res.status(404).send(err);
 			res.json(user);
 		})
+	});
+
+	app.get('/api/searchUser/:username', function (req, res)
+	{
+		User.find({isPrivate: false, "username": /req.params.username/i}).populate(userPopulateQuery).exec(function (err, users)
+			{
+				if (err)
+					res.status(404).send(err);
+				res.json(users);
+			}
+		);
 	});
 
 	// follow a user
@@ -123,7 +135,7 @@ module.exports = function (app, passport)
 				if (err)
 					res.status(404).send(err);
 
-				Comment.populate(comment, 'author', function(err, comment)
+				Comment.populate(comment, 'author', function (err, comment)
 				{
 					res.send(comment);
 				});
@@ -151,8 +163,9 @@ module.exports = function (app, passport)
 	{
 		//aws.config.update({accessKeyId: AWS_ACCESS_KEY, secretAccessKey: AWS_SECRET_KEY});
 		aws.config.update({
-			accessKeyId: process.env.AWS_ACCESS_KEY,
-			secretAccessKey: process.env.AWS_SECRET_KEY});
+			accessKeyId:     process.env.AWS_ACCESS_KEY,
+			secretAccessKey: process.env.AWS_SECRET_KEY
+		});
 		var s3 = new aws.S3();
 		var s3_params = {
 			Bucket:      process.env.S3_BUCKET,
@@ -312,7 +325,7 @@ module.exports = function (app, passport)
 	 ====================================================*/
 	// route to handle all angular requests
 	app.get('*', function (req, res)
-	//app.use(function(req, res, next){
+		//app.use(function(req, res, next){
 	{
 		if (req.isAuthenticated())
 		{
@@ -323,7 +336,7 @@ module.exports = function (app, passport)
 
 				//res.cookie('u', JSON.stringify(user), {maxAge: 900000});
 				//res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
-				res.render('index', { globalUser: user })
+				res.render('index', {globalUser: user})
 			});
 		}
 		else
@@ -331,7 +344,7 @@ module.exports = function (app, passport)
 			//res.cookie('u', '', {maxAge: 900000});
 			//res.sendFile('index.html', {root: path.join(__dirname, '../public')}); // load our public/index.html file
 			console.log("not logged in");
-			res.render('index', { globalUser: "" })
+			res.render('index', {globalUser: ""})
 		}
 	});
 };
