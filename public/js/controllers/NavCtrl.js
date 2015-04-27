@@ -42,12 +42,9 @@ angular.module('navbar', [])
 			 $scope.currentUser = currentUser;
 		 });
 
-		 $scope.search = function()
+		 $scope.search = function ()
 		 {
-			 if ($scope.searchField)
-			 {
-				 $scope.$emit('searchEvent', $scope.searchField);
-			 }
+			 $scope.$emit('searchEvent', $scope.searchField);
 		 }
 
 	 }]);

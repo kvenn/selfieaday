@@ -39,7 +39,6 @@
     "commit": "c5d087a8b516f1d4428c34b8333f94411aaa900b"
   },
   "_source": "git://github.com/JanStevens/angular-growl-2.git",
-  "_target": "~0.7.3",
-  "_originalSource": "angular-growl-v2",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "angular-growl-v2"
 }

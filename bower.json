@@ -6,6 +6,7 @@
     "font-awesome": "latest",
     "animate.css": "latest",
     "angular": "latest",
+    "angular-growl-v2": "latest",
     "angular-route": "latest",
     "angular-cookie": "latest",
     "angular-preloaded": "~0.1.0"

@@ -66,17 +66,6 @@ module.exports = function (app, passport)
 		})
 	});
 
-	app.get('/api/searchUser/:username', function (req, res)
-	{
-		User.find({isPrivate: false, "username": /req.params.username/i}).populate(userPopulateQuery).exec(function (err, users)
-			{
-				if (err)
-					res.status(404).send(err);
-				res.json(users);
-			}
-		);
-	});
-
 	// follow a user
 	app.post('/api/follow', function (req, res)
 	{
@@ -153,6 +142,33 @@ module.exports = function (app, passport)
 				res.status(404).send(err);
 			res.send();
 		});
+	});
+
+	/*===================================================
+	 Search API
+	 ====================================================*/
+	// Find all users by username
+	app.get('/api/searchUser/:username', function (req, res)
+	{
+		User.find({isPrivate: false, "username": new RegExp(req.params.username, "i")}).populate(userPopulateQuery).exec(function (err, users)
+			{
+				if (err)
+					res.status(404).send(err);
+				res.json(users);
+			}
+		);
+	});
+
+	// Find all users by hashtag
+	app.get('/api/searchHashtag/:hashtag', function (req, res)
+	{
+		User.find({isPrivate: false, "pics.hashtags": { $in: [req.params.hashtag] }}).populate(userPopulateQuery).exec(function (err, users)
+			{
+				if (err)
+					res.status(404).send(err);
+				res.json(users);
+			}
+		);
 	});
 
 	/*===================================================

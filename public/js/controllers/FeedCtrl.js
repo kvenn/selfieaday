@@ -13,8 +13,8 @@ angular.module('feed', [])
 		$locationProvider.html5Mode(true);
 	}])
 	.controller('FeedController',
-	['$http', '$scope', '$routeParams', 'Auth', 'Helpers', '$rootScope',
-	 function ($http, $scope, $routeParams, Auth, Helpers, $rootScope)
+	['$http', '$scope', '$routeParams', 'Auth', 'Helpers', '$rootScope', 'growl',
+	 function ($http, $scope, $routeParams, Auth, Helpers, $rootScope, growl)
 	 {
 		 // TODO Make current user and isloggedin just root scope?
 		 $scope.currentUser = Auth.currentUser();
@@ -60,32 +60,45 @@ angular.module('feed', [])
 			 {
 				 var username = args.substring(1); // remove @ symbol
 				 username.replace(/ /g,''); // remove spaces
-				 $http.get('/api/user/' + username)
+				 $http.get('/api/searchUser/' + username)
 					 .success(function (data)
 					 {
-						 $scope.users = [].concat( data );;
+						 if (data.length > 0)
+						 	$scope.users = [].concat( data );
+						 else
+							 growl.error("No users found with that username: " + username, {ttl: 4000});
 					 })
 					 .error(function (response, data, status, header)
 					 {
-						 //if(status == '404')
-						 //{
-						 //$scope.errorMessage = "The user " + username + " doesn't exist or is set to private.";
-						 //}
-						 console.log("error");
+						 growl.error("Something went wrong...please try again later", {ttl: 3000});
+						 console.log(response);
 					 });
 			 }
 			 else if (args.charAt(0) == '#')
 			 {
-				 console.log("hashtag search")
+				 var hashtag = args.substring(1); // remove # symbol
+				 hashtag.replace(/ /g,''); // remove spaces
+				 $http.get('/api/searchHashtag/' + hashtag)
+					 .success(function (data)
+					 {
+						 if (data.length > 0)
+							 $scope.users = [].concat( data );
+						 else
+							 growl.error("No pics found with that hashtag: "+hashtag, {ttl: 4000});
+					 })
+					 .error(function (response, data, status, header)
+					 {
+						 growl.error("Something went wrong...please try again later", {ttl: 3000});
+						 console.log(response);
+					 });
+			 }
+			 else if (args == "") // no query = full feed
+			 {
+				 $scope.getUsers();
 			 }
 			 else
 			 {
-				 console.log("generic search")
+				 growl.info("Please specify either username (@) or hashtag (#)", {ttl: 4000});
 			 }
-			 //$http.get('/api/user')
-				// .success(function (data)
-				// {
-				//	 $scope.users = data;
-				// });
 		 });
 	 }]);
