@@ -30,7 +30,7 @@
                     </div>
 
                     <div id="user" class="col-sm-6">
-                        <div class="row">
+                        <div class="row user_profile_info">
                             <div class="col-xs-3">
                                 <img class="profile_thumbnail"
                                      src="{{basePhotoUrl}}{{!!(user.pics[user.pics.length-1].filename) ? (user.pics[user.pics.length-1].filename) : 'blank'}}">
@@ -46,7 +46,7 @@
                                 <button ng-click="hideCamera()" ng-show="isLoggedIn && isCurrentProfile && photoMode" class="btn btn-success">Close Camera</button>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row user_followers">
                             <div class="col-xs-12">
                                 <span ng-repeat="follower in user.followers | limitTo: 10">
                                     <a href="/profile/{{follower.username}}">
@@ -59,6 +59,14 @@
                                         {{user.followers.length>10 ? '...'+(user.followers.length - 10)+' more' : ''}}
                                     </span>
                                 </span>
+                            </div>
+                        </div>
+                        <!-- TODO: put in the show more comments button (if it's over 50) - put modal in index.ejs -->
+                        <div class="row comment_section">
+                            <div ng-repeat="comment in user.comments">
+                                <p class="comment" ng-hide="user.comments.length > 50 ? $index < (user.comments.length - 50) : false">
+                                    <a href="profile/{{comment.author.username}}">{{comment.author.username}}</a> {{comment.text}}
+                                </p>
                             </div>
                         </div>
                     </div>

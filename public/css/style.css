@@ -67,7 +67,6 @@ a {
     /*padding-left: 15px;*/
     /*padding-right: 15px;*/
     position: relative;
-    height: 40px;
     border-bottom: 1px solid #ddd;
     margin: 1px 0 -1px;
     background: #e6e6e6 url("//instagramstatic-a.akamaihd.net/bluebar/9ba8070/images/bg/white-gradient-100px.png") repeat-x 50% 50%;
@@ -124,6 +123,26 @@ a {
 /************************************************************************
 **************************     PROFILE
 ************************************************************************/
+
+.user_profile_info {
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 2px rgba(0,0,0,.06);
+    margin-left:-12px;
+    margin-right:-15px;
+    background-color: #fefefe;
+    border-radius: 0 3px 0 0;
+}
+
+.user_followers {
+    display: block;
+    padding: 11px 12px 12px 12px;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 1px 1px rgba(0,0,0,.06);
+    line-height: 16px;
+    margin-left:-12px;
+    margin-right:-15px;
+    background-color: #fefefe;
+}
 
 .profile_thumbnail {
     width:100%;

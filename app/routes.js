@@ -58,11 +58,19 @@ module.exports = function (app, passport)
 	app.get('/api/user/:username', function (req, res)
 	{
 		var username = req.params.username;
-		User.findOne({username: username}).populate(userPopulateQuery).exec(function (err, user)
+		User.findOne({username: username}).populate(userPopulateQuery).exec(function (err, doc)
 		{
+			var options = {
+				path:  'comments.author',
+				model: 'User'
+			};
+
 			if (err)
-				res.status(404).send(err);
-			res.json(user);
+				res.status(400).send(err);
+			User.populate(doc, options, function (err, user)
+			{
+				res.json(user);
+			});
 		})
 	});
 

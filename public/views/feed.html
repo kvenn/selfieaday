@@ -15,7 +15,7 @@
 
                 <!-- Left/Middle Side (Like/Followers)-->
                 <div class="followers inline">
-                    <div ng-repeat="follower in user.followers | limitTo: 4">
+                    <span ng-repeat="follower in user.followers | limitTo: 4">
                         <a href="/profile/{{follower.username}}">
                             {{currentUser && follower.username == currentUser.username ? 'you' : follower.username}}
                         </a>
@@ -25,7 +25,7 @@
                             ($index==user.followers.length-2) ? ' and ' : ', '}}
                             {{user.followers.length>10 ? ' ...'+(user.followers.length - 4)+' more' : ''}}
                         </span>
-                    </div>
+                    </span>
                 </div>
 
                 <!-- Right Side (Facelapse Owner)-->

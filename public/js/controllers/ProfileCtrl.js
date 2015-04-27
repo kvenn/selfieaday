@@ -160,7 +160,8 @@ angular.module('profile', [])
 				 },
 				 onFinishS3Put:   function (public_url)
 				 {
-					 status_elem.innerHTML = 'Upload completed. Uploaded to: ' + public_url;
+					 //status_elem.innerHTML = 'Upload completed. Uploaded to: ' + public_url;
+					 status_elem.innerHTML = 'Take a photo and save it';
 
 					 var hashtags = $scope.hashtagList;
 					 if (hashtags)
