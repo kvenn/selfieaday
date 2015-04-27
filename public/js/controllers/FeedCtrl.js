@@ -45,4 +45,10 @@ angular.module('feed', [])
 			 $scope.commentsModalUser = user;
 			 $('#myModal').modal('show');
 		 };
+
+		 $scope.picsMoreThan = function(val){
+			return function(item){
+				 return item.pics.length > val;
+			}
+		 }
 	 }]);

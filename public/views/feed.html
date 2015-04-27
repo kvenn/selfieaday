@@ -1,7 +1,7 @@
 <!-- public/views/feed.html -->
 
 <div id="feed_container">
-    <div class="feed_item center-block" ng-repeat="user in users">
+    <div class="feed_item center-block" ng-repeat="user in users | filter: picsMoreThan(1)">
         <div class="feed_card">
 
             <div class="photo_container center-block">
