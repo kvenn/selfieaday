@@ -4,42 +4,63 @@
         <div class="well">
 
             <!-- If there's a user to show -->
-            <container ng-show="user.username" class="row">
-                <div ng-hide="photoMode" id="facelapse_container" class="col-sm-6">
-                    <img class="slideshow" slideshow images="user.pics">
-                </div>
-                <!-- This is the current user -->
-                <div ng-show="photoMode" class="col-sm-6 center-block text-center">
-                    <div id="video_container" ng-hide="viewingPhoto">
-                        <video id="video" width="100%">Video stream not available.</video>
-                        <span id="startbutton" class="glyphicon glyphicon-camera camera_btn" aria-hidden="true"></span>
+            <container ng-show="user.username">
+                <div class="row">
+                    <div ng-hide="photoMode" id="facelapse_container" class="col-sm-6">
+                        <img class="slideshow" slideshow images="user.pics">
+                    </div>
+                    <!-- This is the current user -->
+                    <div ng-show="photoMode" class="col-sm-6 center-block text-center">
+                        <div id="video_container" ng-hide="viewingPhoto">
+                            <video id="video" width="100%">Video stream not available.</video>
+                            <span id="startbutton" class="glyphicon glyphicon-camera camera_btn" aria-hidden="true"></span>
+                        </div>
+
+                        <div id="camera_photo_container" ng-show="viewingPhoto">
+                            <span id="cancelpicture" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                            <img id="camera_photo" alt="">
+                            <span id="uploadphoto" ng-click="uploadPhoto()" class="glyphicon glyphicon-ok camera_btn" aria-hidden="true"></span>
+                        </div>
+
+                        <p id="status">Take a photo and save it.</p>
+
+                        <canvas id="canvas">
+                        </canvas>
+                        <input ng-show="viewingPhoto" ng-model="hashtagList" class="form-control" placeholder="Example: #haircut,#newshirt">
                     </div>
 
-                    <div id="camera_photo_container" ng-show="viewingPhoto">
-                        <span id="cancelpicture" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                        <img id="camera_photo" alt="">
-                        <span id="uploadphoto" ng-click="uploadPhoto()" class="glyphicon glyphicon-ok camera_btn" aria-hidden="true"></span>
-                    </div>
+                    <div id="user" class="col-sm-6">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <img class="profile_thumbnail"
+                                     src="{{basePhotoUrl}}{{!!(user.pics[user.pics.length-1].filename) ? (user.pics[user.pics.length-1].filename) : 'blank'}}">
+                            </div>
 
-                    <p id="status">Take a photo and save it.</p>
+                            <h2 class="col-xs-3">{{user.username}}</h2>
 
-                    <canvas id="canvas">
-                    </canvas>
-                    <input ng-show="viewingPhoto" ng-model="hashtagList" class="form-control" placeholder="Example: #haircut,#newshirt">
-                </div>
-
-                <div id="user" class="col-sm-6">
-                    <img class="col-xs-2 profile_thumbnail"
-                         src="{{basePhotoUrl}}{{!!(user.pics[user.pics.length-1].filename) ? (user.pics[user.pics.length-1].filename) : 'blank'}}">
-
-                    <h2 class="col-xs-3">{{user.username}}</h2>
-
-                    <div id="user_info" class="col-xs-4 pull-right text-right">
-                        <p>{{user.pics.length}} Photos</p>
-                        <button ng-click="follow()" ng-show="isLoggedIn && !isCurrentProfile && !isFollowing" class="btn btn-success btn_follow">Follow</button>
-                        <button ng-click="unfollow()" ng-show="isLoggedIn && !isCurrentProfile && isFollowing" class="btn btn-default btn_follow">Unfollow</button>
-                        <button ng-click="showCamera()" ng-show="isLoggedIn && isCurrentProfile && !photoMode" class="btn btn-success">Take Picture</button>
-                        <button ng-click="hideCamera()" ng-show="isLoggedIn && isCurrentProfile && photoMode" class="btn btn-success">Close Camera</button>
+                            <div id="user_info" class="col-xs-4 pull-right text-right">
+                                <p>{{user.pics.length}} Photos</p>
+                                <button ng-click="follow()" ng-show="isLoggedIn && !isCurrentProfile && !isFollowing" class="btn btn-success btn_follow">Follow</button>
+                                <button ng-click="unfollow()" ng-show="isLoggedIn && !isCurrentProfile && isFollowing" class="btn btn-default btn_follow">Unfollow</button>
+                                <button ng-click="showCamera()" ng-show="isLoggedIn && isCurrentProfile && !photoMode" class="btn btn-success">Take Picture</button>
+                                <button ng-click="hideCamera()" ng-show="isLoggedIn && isCurrentProfile && photoMode" class="btn btn-success">Close Camera</button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <span ng-repeat="follower in user.followers | limitTo: 10">
+                                    <a href="/profile/{{follower.username}}">
+                                        {{currentUser && follower.username == currentUser.username ? 'you' : follower.username}}
+                                    </a>
+                                    <span>
+                                        {{$last ?
+                                        (user.followers.length==1 && (currentUser?currentUser.username!=follower.username:true) ? 'likes this' : 'like this') :
+                                        ($index==user.followers.length-2) ? ' and ' : ', '}}
+                                        {{user.followers.length>10 ? '...'+(user.followers.length - 10)+' more' : ''}}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </container>

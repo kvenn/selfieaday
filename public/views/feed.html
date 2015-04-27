@@ -23,6 +23,7 @@
                             {{$last ?
                             (user.followers.length==1 && (currentUser?currentUser.username!=follower.username:true) ? 'likes this' : 'like this') :
                             ($index==user.followers.length-2) ? ' and ' : ', '}}
+                            {{user.followers.length>10 ? ' ...'+(user.followers.length - 4)+' more' : ''}}
                         </span>
                     </div>
                 </div>
