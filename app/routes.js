@@ -151,24 +151,29 @@ module.exports = function (app, passport)
 	app.get('/api/searchUser/:username', function (req, res)
 	{
 		User.find({isPrivate: false, "username": new RegExp(req.params.username, "i")}).populate(userPopulateQuery).exec(function (err, users)
-			{
-				if (err)
-					res.status(404).send(err);
-				res.json(users);
-			}
-		);
+		{
+			if (err)
+				res.status(404).send(err);
+			res.json(users);
+		});
 	});
 
 	// Find all users by hashtag
 	app.get('/api/searchHashtag/:hashtag', function (req, res)
 	{
-		User.find({isPrivate: false, "pics.hashtags": { $in: [req.params.hashtag] }}).populate(userPopulateQuery).exec(function (err, users)
+
+		Pic.find({hashtags: {$in: [req.params.hashtag]}}).exec(function (err, pics)
+		{
+			// Map the docs into an array of just the _ids
+			var ids = pics.map(function(pic) { return pic._id; });
+
+			User.find({isPrivate: false, pics: {$in: ids}}).populate(userPopulateQuery).exec(function (err, users)
 			{
 				if (err)
 					res.status(404).send(err);
 				res.json(users);
-			}
-		);
+			})
+		});
 	});
 
 	/*===================================================

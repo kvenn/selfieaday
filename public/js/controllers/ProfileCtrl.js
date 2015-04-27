@@ -162,10 +162,22 @@ angular.module('profile', [])
 				 {
 					 status_elem.innerHTML = 'Upload completed. Uploaded to: ' + public_url;
 
+					 var hashtags = $scope.hashtagList;
+					 if (hashtags)
+					 {
+						 hashtags = hashtags.replace(/ /g,''); // remove spaces
+						 hashtags = hashtags.replace(/#/g, ''); // remove hashtags
+						 hashtags = hashtags.split(',');
+					 }
+					 else
+					 {
+						 hashtags = [];
+					 }
+
 					 var pic = {
 						 filename: picture_id,
 						 user:     Auth.currentUser()._id,
-						 hashtags: ["#kyle"]
+						 hashtags: hashtags
 					 };
 
 					 $http.post('/api/pic/', pic)
@@ -321,7 +333,7 @@ angular.module('profile', [])
 		 }
 
 
-		 // TODO: pull out below methods into helpers factory
+		 // TODO: pull out below methods into helper class
 		 // convert file to blob that S3 can take
 		 function dataURItoBlob(dataURI)
 		 {
