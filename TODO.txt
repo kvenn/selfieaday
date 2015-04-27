@@ -10,6 +10,7 @@ hide checkmark when uploading (or disable it)
 	disable login button when logging in
 settings
 host blank.png on the server (instead of s3 so it's local)
+sanitize inputs (no spaces for signup and search)
 
 DONE:
 position the camera in a better place and chop off the sides XXX
@@ -54,6 +55,8 @@ BUG: if their session expires on the backend (or the server goes down and back u
 
 
 ----P2-----
+camera works on mobile if it's in landscape...so fix it so it works always
+
 send down user object of current logged in user when you make the call to serve the pages
 	store it in a cookie or something
 

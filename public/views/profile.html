@@ -29,12 +29,12 @@
                 </div>
 
                 <div id="user" class="col-sm-6">
-                    <img class="col-sm-2 profile_thumbnail"
+                    <img class="col-xs-2 profile_thumbnail"
                          src="{{basePhotoUrl}}{{!!(user.pics[user.pics.length-1].filename) ? (user.pics[user.pics.length-1].filename) : 'blank'}}">
 
-                    <h2 class="col-sm-3">{{user.username}}</h2>
+                    <h2 class="col-xs-3">{{user.username}}</h2>
 
-                    <div id="user_info" class="col-sm-4 pull-right text-right">
+                    <div id="user_info" class="col-xs-4 pull-right text-right">
                         <p>{{user.pics.length}} Photos</p>
                         <button ng-click="follow()" ng-show="isLoggedIn && !isCurrentProfile && !isFollowing" class="btn btn-success btn_follow">Follow</button>
                         <button ng-click="unfollow()" ng-show="isLoggedIn && !isCurrentProfile && isFollowing" class="btn btn-default btn_follow">Unfollow</button>
