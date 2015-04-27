@@ -13,8 +13,8 @@ angular.module('feed', [])
 		$locationProvider.html5Mode(true);
 	}])
 	.controller('FeedController',
-	['$http', '$scope', '$routeParams', 'Auth',
-	 function ($http, $scope, $routeParams, Auth)
+	['$http', '$scope', '$routeParams', 'Auth', 'Helpers',
+	 function ($http, $scope, $routeParams, Auth, Helpers)
 	 {
 		 // TODO Make current user and isloggedin just root scope?
 		 $scope.currentUser = Auth.currentUser();
@@ -37,7 +37,7 @@ angular.module('feed', [])
 
 		 $scope.isFollowing = function (user)
 		 {
-			 return $scope.currentUser && userIndexOf(user.followers, $scope.currentUser) != -1;
+			 return $scope.currentUser && Helpers.userIndexOf(user.followers, $scope.currentUser) != -1;
 		 };
 
 		 $scope.showComments = function (user)
@@ -45,17 +45,4 @@ angular.module('feed', [])
 			 $scope.commentsModalUser = user;
 			 $('#myModal').modal('show');
 		 };
-
-		 // TODO pull out to global functions
-		 function userIndexOf(arr, user)
-		 {
-			 for (var i = 0; i < arr.length; i++)
-			 {
-				 if (arr[i]._id == user._id)
-				 {
-					 return i;
-				 }
-			 }
-			 return -1;
-		 }
 	 }]);

@@ -12,8 +12,8 @@ angular.module('profile', [])
 	}])
 
 	.controller('ProfileController',
-	['$http', '$scope', '$routeParams', '$route', 'Auth',
-	 function ($http, $scope, $routeParams, $route, Auth)
+	['$http', '$scope', '$routeParams', '$route', 'Auth', 'Helpers',
+	 function ($http, $scope, $routeParams, $route, Auth, Helpers)
 	 {
 		 /*===================================================
 		  SCOPE VARIABLE INIT
@@ -48,7 +48,7 @@ angular.module('profile', [])
 					 $scope.user = data;
 					 if ($scope.currentUser != null)
 					 {
-						 $scope.isFollowing = userIndexOf($scope.currentUser.following, $scope.user) != -1
+						 $scope.isFollowing = Helpers.userIndexOf($scope.currentUser.following, $scope.user) != -1
 					 }
 				 })
 				 .error(function (response, data, status, header)
@@ -126,10 +126,10 @@ angular.module('profile', [])
 				 .success(function (data)
 				 {
 					 var currentUser = Auth.currentUser();
-					 var unfollowUserIdx = userIndexOf(currentUser.following, $scope.user);
+					 var unfollowUserIdx = Helpers.userIndexOf(currentUser.following, $scope.user);
 					 currentUser.following.splice(unfollowUserIdx, 1);
 
-					 var removeFollowerIdx = userIndexOf($scope.user.followers, currentUser);
+					 var removeFollowerIdx = Helpers.userIndexOf($scope.user.followers, currentUser);
 					 $scope.user.followers.splice(removeFollowerIdx, 1);
 
 					 Auth.updateCurrentUser(currentUser);
@@ -321,19 +321,7 @@ angular.module('profile', [])
 		 }
 
 
-		 // TODO: pull out below methods into helper class
-		 function userIndexOf(arr, user)
-		 {
-			 for (var i = 0; i < arr.length; i++)
-			 {
-				 if (arr[i]._id == user._id)
-				 {
-					 return i;
-				 }
-			 }
-			 return -1;
-		 }
-
+		 // TODO: pull out below methods into helpers factory
 		 // convert file to blob that S3 can take
 		 function dataURItoBlob(dataURI)
 		 {
