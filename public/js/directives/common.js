@@ -44,7 +44,12 @@ angular.module('common-directives', [])
 					if (scope.images && scope.images.length != 0)
 					{
 						scope.imgIndex = (scope.imgIndex + 1) % scope.images.length;
-						attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
+						attrs.$set('src', scope.images[scope.imgIndex].src);
+
+						//attrs.$set('src', fullPathUrl + scope.images[scope.imgIndex].filename);
+
+						//var tempImg = new Image();
+						//tempImg.src = fullPathUrl + scope.images[scope.imgIndex].filename;
 					}
 					else
 					{

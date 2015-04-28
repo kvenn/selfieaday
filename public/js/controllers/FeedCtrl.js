@@ -31,6 +31,7 @@ angular.module('feed', [])
 				 .success(function (data)
 				 {
 					 $scope.users = data;
+					 Helpers.preloadImages($scope.users);
 				 });
 		 };
 		 $scope.getUsers();
@@ -56,17 +57,22 @@ angular.module('feed', [])
 
 		 $rootScope.$on('searchEvent', function (event, args)
 		 {
-			 if(args.charAt(0) == '@')
+			 if (args.charAt(0) == '@')
 			 {
 				 var username = args.substring(1); // remove @ symbol
-				 username.replace(/ /g,''); // remove spaces
+				 username.replace(/ /g, ''); // remove spaces
 				 $http.get('/api/searchUser/' + username)
 					 .success(function (data)
 					 {
 						 if (data.length > 0)
-						 	$scope.users = [].concat( data );
+						 {
+							 $scope.users = [].concat(data);
+							 Helpers.preloadImages($scope.users);
+						 }
 						 else
+						 {
 							 growl.error("No users found with that username: " + username, {ttl: 4000});
+						 }
 					 })
 					 .error(function (response, data, status, header)
 					 {
@@ -77,14 +83,19 @@ angular.module('feed', [])
 			 else if (args.charAt(0) == '#')
 			 {
 				 var hashtag = args.substring(1); // remove # symbol
-				 hashtag.replace(/ /g,''); // remove spaces
+				 hashtag.replace(/ /g, ''); // remove spaces
 				 $http.get('/api/searchHashtag/' + hashtag)
 					 .success(function (data)
 					 {
 						 if (data.length > 0)
-							 $scope.users = [].concat( data );
+						 {
+							 $scope.users = [].concat(data);
+							 Helpers.preloadImages($scope.users);
+						 }
 						 else
-							 growl.error("No pics found with that hashtag: "+hashtag, {ttl: 4000});
+						 {
+							 growl.error("No pics found with that hashtag: " + hashtag, {ttl: 4000});
+						 }
 					 })
 					 .error(function (response, data, status, header)
 					 {

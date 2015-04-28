@@ -1,5 +1,6 @@
 angular.module('helpers', [])
-	.factory('Helpers', ['$q', '$location', '$http', '$cookies', function ($q, $location, $http, $cookies)
+	.factory('Helpers', ['$q', '$location', '$http', '$cookies',
+						 function ($q, $location, $http, $cookies)
 	{
 		return {
 			setCookie: function (user)
@@ -20,6 +21,21 @@ angular.module('helpers', [])
 					}
 				}
 				return -1;
+			},
+
+			preloadImages: function(users)
+			{
+				for (var i = 0; i < users.length; i++)
+				{
+					var user = users[i];
+					user.images = [];
+					var pics = user.pics;
+					for(var x=0;x<pics.length;x++) {
+						var tempImg = new Image();
+						tempImg.src = "https://selfieaday.s3.amazonaws.com/" + pics[x].filename;
+						user.images.push(tempImg);
+					}
+				}
 			}
 		};
 	}]);

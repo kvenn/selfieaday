@@ -34,6 +34,16 @@ angular.module('profile', [])
 			 }
 		 });
 
+		 //$scope.$watch(function(scope){ return scope.user; }, function ()
+		 //{
+			// if ($scope.user)
+			// 	Helpers.preloadImages([user])
+		 //});
+		 $scope.$watch("user", function ()
+		 {
+			 if ($scope.user)
+				 Helpers.preloadImages([$scope.user])
+		 });
 
 		 var mediaStream;
 		 // TODO: just set the css to hide by default
