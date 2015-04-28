@@ -8,6 +8,7 @@ angular.module('helpers', [])
 				var copiedUser = jQuery.extend({}, user);
 				delete copiedUser['pics'];
 				delete copiedUser['comments'];
+				delete copiedUser['images'];
 				$cookies['u'] = JSON.stringify(copiedUser);
 			},
 

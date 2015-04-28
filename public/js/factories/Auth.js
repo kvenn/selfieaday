@@ -63,14 +63,6 @@ angular.module('auth', [])
 				return currentUser;
 			},
 
-			setCookie: function (user)
-			{
-				var copiedUser = jQuery.extend({},user);
-				delete copiedUser['pics'];
-				delete copiedUser['comments'];
-				$cookies['u'] = JSON.stringify(copiedUser);
-			},
-
 			currentUser: function ()
 			{
 				return currentUser;

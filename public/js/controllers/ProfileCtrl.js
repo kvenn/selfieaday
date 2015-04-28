@@ -34,11 +34,6 @@ angular.module('profile', [])
 			 }
 		 });
 
-		 //$scope.$watch(function(scope){ return scope.user; }, function ()
-		 //{
-			// if ($scope.user)
-			// 	Helpers.preloadImages([user])
-		 //});
 		 $scope.$watch("user", function ()
 		 {
 			 if ($scope.user)
@@ -197,6 +192,11 @@ angular.module('profile', [])
 							 console.log(data);
 							 var currentUser = Auth.currentUser();
 							 currentUser.pics.push(pic);
+
+							 var tempImg = new Image();
+							 tempImg.src = $scope.basePhotoUrl + pic.filename;
+							 $scope.user.images.push(tempImg);
+
 							 Auth.updateCurrentUser(currentUser);
 							 $scope.cancelPicture();
 							 $scope.hideCamera();
