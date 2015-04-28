@@ -158,11 +158,19 @@ module.exports = function (app, passport)
 	// Find all users by username
 	app.get('/api/searchUser/:username', function (req, res)
 	{
-		User.find({isPrivate: false, "username": new RegExp(req.params.username, "i")}).populate(userPopulateQuery).exec(function (err, users)
+		User.find({isPrivate: false, "username": new RegExp(req.params.username, "i")}).populate(userPopulateQuery).exec(function (err, docs)
 		{
+			var options = {
+				path:  'comments.author',
+				model: 'User'
+			};
+
 			if (err)
-				res.status(404).send(err);
-			res.json(users);
+				res.status(400).send(err);
+			User.populate(docs, options, function (err, users)
+			{
+				res.json(users);
+			});
 		});
 	});
 
@@ -175,11 +183,19 @@ module.exports = function (app, passport)
 			// Map the docs into an array of just the _ids
 			var ids = pics.map(function(pic) { return pic._id; });
 
-			User.find({isPrivate: false, pics: {$in: ids}}).populate(userPopulateQuery).exec(function (err, users)
+			User.find({isPrivate: false, pics: {$in: ids}}).populate(userPopulateQuery).exec(function (err, docs)
 			{
 				if (err)
-					res.status(404).send(err);
-				res.json(users);
+					res.status(400).send(err);
+				var options = {
+					path:  'comments.author',
+					model: 'User'
+				};
+
+				User.populate(docs, options, function (err, users)
+				{
+					res.json(users);
+				});
 			})
 		});
 	});
