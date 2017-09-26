@@ -1,0 +1,9 @@
+rhc ssh -a selfieaday
+bower install angular-preloaded --save
+npm install ejs --save
+rhc tail --app selfieaday
+rhc env-list -a selfieaday
+rhc app restart -a selfieaday
+node server.js
+mongo
+mongod

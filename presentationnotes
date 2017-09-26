@@ -1,0 +1,59 @@
+#################################
+########### Introduction
+#################################
+
+Take pictures whenever you want
+Collects them in one place
+View other people's and interact w/ frnds
+SelfieStream/Selfie-a-day/FaceLapse
+
+#################################
+########### Problem
+#################################
+
+1) Needing to remember to take pictures
+2) Putting it all together
+
+#################################
+########### Solution
+#################################
+
+Selfie Stream
+Automatically compiles them for you
+Let's you view others
+Eventually will send out daily emails
+
+#################################
+########### Architecture
+#################################
+
+Openshift
+S3 for images
+MEAN stack
+Very little jQuery
+WebRTC (camera)
+Doesn't work in Safari
+
+Key libs: passport, mongoose, aws-sdk
+
+#################################
+########### Data Model
+#################################
+
+Refer to the Mongoose classes
+
+#################################
+########### Demo
+#################################
+
+All features
+Directives
+
+#################################
+########### The Future
+#################################
+
+settings for private
+email daily
+direct to public for safari
+text messages?
